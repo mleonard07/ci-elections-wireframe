@@ -1,0 +1,1018 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>Community Impact '26 — Voter Guide</title>
+<style>
+@font-face {
+  font-family: 'Guardian Sans Web';
+  src: url('fonts/GuardianSans-Regular-Web.woff2') format('woff2');
+  font-weight: 400; font-style: normal;
+}
+@font-face {
+  font-family: 'Guardian Sans Web';
+  src: url('fonts/GuardianSans-RegularIt-Web.woff2') format('woff2');
+  font-weight: 400; font-style: italic;
+}
+@font-face {
+  font-family: 'Guardian Sans Web';
+  src: url('fonts/GuardianSans-Semibold-Web.woff2') format('woff2');
+  font-weight: 600; font-style: normal;
+}
+@font-face {
+  font-family: 'Guardian Sans Web';
+  src: url('fonts/GuardianSans-Bold-Web.woff2') format('woff2');
+  font-weight: 700; font-style: normal;
+}
+@font-face {
+  font-family: 'Guardian Sans Narrow Web';
+  src: url('fonts/GuardianSansNarrow-Semibold-Web.woff2') format('woff2');
+  font-weight: 600; font-style: normal;
+}
+</style>
+<link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+:root {
+  --red:#C41230; --red-hover:#A50E28; --red-faint:#FEF2F4;
+  --dark:#0F172A; --body:#334155; --muted:#64748B; --subtle:#94A3B8;
+  --border:#E2E8F0; --surface:#F8FAFC; --white:#FFFFFF;
+  --gold:#C8961A; --gold-faint:#FFFBEB;
+  --green:#15803D; --green-faint:#F0FDF4;
+  --blue:#1D4ED8; --blue-faint:#EFF6FF;
+  --radius-sm:6px; --radius:12px; --radius-lg:16px;
+  --shadow-sm:0 1px 3px rgba(15,23,42,.06),0 1px 2px rgba(15,23,42,.04);
+  --shadow:0 4px 12px rgba(15,23,42,.07),0 1px 3px rgba(15,23,42,.04);
+}
+body { font-family:'Guardian Sans Web','Open Sans',system-ui,sans-serif; color:var(--dark); background:var(--surface); font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased; }
+a { color:var(--red); text-decoration:none; }
+a:hover { text-decoration:underline; }
+button { cursor:pointer; font-family:'Guardian Sans Web','Open Sans',sans-serif;}
+
+/* ── Dates Bar ── */
+.dates-bar { position:sticky; top:0; z-index:1000; background:var(--dark); color:#fff; display:flex; justify-content:center; align-items:center; height:40px; font-size:12.5px; }
+.dates-bar-inner { display:flex; align-items:center; gap:32px; }
+.date-item { display:flex; align-items:center; gap:7px; color:rgba(255,255,255,.7); }
+.date-item strong { color:#fff; font-weight:600; }
+.date-dot { width:5px; height:5px; border-radius:50%; background:rgba(255,255,255,.25); }
+.date-pill { background:var(--red); color:#fff; font-weight:700; font-size:11px; padding:2px 8px; border-radius:20px; }
+
+/* ── Nav ── */
+.nav { background:var(--white); border-bottom:1px solid var(--border); display:grid; grid-template-columns:1fr auto 1fr; align-items:center; padding:0 32px; height:60px; position:sticky; top:40px; z-index:999; }
+.nav-links { justify-content:center; }
+.nav-right { justify-content:flex-end; }
+.nav-logo { display:flex; align-items:center; }
+.logo-text { font-size:13px; font-weight:900; line-height:1.1; text-transform:uppercase; letter-spacing:-.3px; color:var(--red); }
+.logo-divider { width:2px; height:28px; background:var(--border); margin:0 14px; }
+.logo-sub { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:var(--muted); }
+.nav-links { display:flex; gap:4px; }
+.nav-link { font-size:13.5px; font-weight:500; color:var(--body); padding:6px 12px; border-radius:var(--radius-sm); background:none; border:none; }
+.nav-link:hover { background:var(--surface); }
+.nav-link.active { color:var(--red); font-weight:700; }
+.nav-right { display:flex; align-items:center; gap:10px; }
+.btn-ghost { background:none; border:1px solid var(--border); color:var(--body); font-size:13px; font-weight:500; padding:7px 16px; border-radius:var(--radius-sm); }
+.btn-ghost:hover { border-color:var(--dark); }
+.btn-primary { background:var(--red); border:none; color:#fff; font-size:13px; font-weight:700; padding:8px 18px; border-radius:var(--radius-sm); }
+.btn-primary:hover { background:var(--red-hover); }
+
+/* ── Hero ── */
+.hero { background:var(--white); border-bottom:1px solid var(--border); padding:64px 32px 52px; text-align:center; }
+.hero-eyebrow { display:inline-flex; align-items:center; gap:8px; background:var(--red-faint); color:var(--red); font-size:11.5px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; padding:5px 12px; border-radius:20px; margin-bottom:20px; }
+.hero h1 { font-size:52px; font-weight:900; letter-spacing:-1.5px; line-height:1.0; color:var(--dark); margin-bottom:12px; }
+.hero h1 em { font-style:normal; color:var(--red); }
+.hero-sub { font-size:17px; color:var(--muted); margin-bottom:36px; max-width:480px; margin-left:auto; margin-right:auto; }
+.search-wrap { max-width:500px; margin:0 auto; position:relative; }
+.search-wrap input { width:100%; padding:14px 130px 14px 46px; font-size:14.5px; font-family:'Guardian Sans Web','Open Sans',sans-serif;border:1.5px solid var(--border); border-radius:40px; color:var(--dark); background:var(--white); outline:none; box-shadow:var(--shadow-sm); transition:border-color .15s,box-shadow .15s; }
+.search-wrap input:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(196,18,48,.10); }
+.search-wrap input::placeholder { color:var(--subtle); }
+.search-icon { position:absolute; left:16px; top:50%; transform:translateY(-50%); color:var(--subtle); font-size:16px; pointer-events:none; }
+.search-btn { position:absolute; right:5px; top:50%; transform:translateY(-50%); background:var(--red); color:#fff; border:none; padding:8px 18px; border-radius:30px; font-size:13px; font-weight:700; font-family:'Guardian Sans Web','Open Sans',sans-serif;}
+.search-btn:hover { background:var(--red-hover); }
+.search-hint { font-size:12px; color:var(--subtle); margin-top:12px; }
+
+/* ── Layout ── */
+.page-body { max-width:1160px; margin:0 auto; padding:32px 32px 80px; }
+.two-col { display:grid; grid-template-columns:1fr 320px; gap:20px; }
+
+/* ── Map Card ── */
+.map-card { border-radius:var(--radius-lg); overflow:hidden; border:1px solid var(--border); box-shadow:var(--shadow-sm); display:flex; flex-direction:column; }
+.map-topbar { background:var(--white); border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; padding:12px 16px; flex-shrink:0; gap:12px; z-index:10; }
+.map-topbar-left { display:flex; align-items:center; gap:10px; flex:1; min-width:0; }
+.map-title { font-size:13px; font-weight:700; color:var(--dark); white-space:nowrap; }
+.metro-pills { display:flex; gap:5px; flex-wrap:wrap; }
+.metro-pill { font-size:12px; font-weight:600; padding:4px 11px; border-radius:20px; border:1.5px solid var(--border); background:var(--white); color:var(--muted); font-family:'Guardian Sans Web','Open Sans',sans-serif;transition:all .15s; white-space:nowrap; }
+.metro-pill:hover { border-color:var(--dark); color:var(--dark); }
+.metro-pill.active { color:#fff; border-color:transparent; }
+.metro-pill[data-metro="austin"].active  { background:#C41230; }
+.metro-pill[data-metro="houston"].active { background:#1D4ED8; }
+.metro-pill[data-metro="dfw"].active     { background:#6D28D9; }
+.metro-pill[data-metro="sa"].active      { background:#B45309; }
+.map-reset-btn { font-size:12px; font-weight:600; color:var(--muted); background:none; border:1px solid var(--border); padding:5px 11px; border-radius:20px; font-family:'Guardian Sans Web','Open Sans',sans-serif;transition:all .15s; }
+.map-reset-btn:hover { border-color:var(--dark); color:var(--dark); }
+.selected-banner { display:none; background:var(--red-faint); border-bottom:1px solid #FECDD3; padding:9px 16px; align-items:center; justify-content:space-between; font-size:13px; gap:8px; }
+.selected-banner.visible { display:flex; }
+.selected-community { font-weight:700; color:var(--red); }
+.selected-hint { color:#9F1239; font-size:12px; }
+.clear-btn { font-size:12px; color:var(--muted); background:none; border:none; cursor:pointer; font-family:'Guardian Sans Web','Open Sans',sans-serif;padding:2px 6px; flex-shrink:0; }
+.clear-btn:hover { color:var(--red); }
+#map { flex:1; min-height:460px; }
+
+/* Leaflet overrides */
+.leaflet-container { font-family:'Guardian Sans Web','Open Sans',sans-serif; }
+.leaflet-popup-content-wrapper { border-radius:10px!important; box-shadow:var(--shadow)!important; border:1px solid var(--border); padding:0!important; }
+.leaflet-popup-content { margin:0!important; }
+.leaflet-popup-tip-container { display:none; }
+.ci-popup { padding:14px 16px; min-width:190px; }
+.ci-popup-metro { font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--subtle); margin-bottom:3px; }
+.ci-popup-name { font-size:14px; font-weight:700; color:var(--dark); margin-bottom:10px; }
+.ci-popup-races { font-size:12px; color:var(--muted); margin-bottom:10px; }
+.ci-popup-btn { display:block; width:100%; text-align:center; background:var(--red); color:#fff; border:none; border-radius:6px; padding:8px 12px; font-size:12.5px; font-weight:700; font-family:'Guardian Sans Web','Open Sans',sans-serif;cursor:pointer; }
+.ci-popup-btn:hover { background:var(--red-hover); }
+
+/* ── Sidebar ── */
+.sidebar-card { background:var(--white); border-radius:var(--radius-lg); border:1px solid var(--border); box-shadow:var(--shadow-sm); display:flex; flex-direction:column; overflow:hidden; }
+.sidebar-header { padding:18px 20px 14px; border-bottom:1px solid var(--border); display:flex; align-items:center; justify-content:space-between; }
+.sidebar-title { font-size:14px; font-weight:700; display:flex; align-items:center; gap:7px; }
+.sidebar-title .star-icon { color:var(--gold); font-size:15px; }
+.sidebar-action { font-size:12px; color:var(--muted); background:none; border:none; font-family:'Guardian Sans Web','Open Sans',sans-serif;cursor:pointer; }
+.login-gate { flex:1; padding:32px 20px; display:flex; flex-direction:column; align-items:center; text-align:center; gap:12px; }
+.gate-icon { width:52px; height:52px; background:var(--gold-faint); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:22px; margin-bottom:4px; }
+.login-gate h4 { font-size:14px; font-weight:700; color:var(--dark); }
+.login-gate p { font-size:13px; color:var(--muted); line-height:1.55; }
+.login-gate .btn-primary { width:100%; padding:10px; font-size:13.5px; }
+.btn-outline { width:100%; background:none; border:1.5px solid var(--border); color:var(--body); font-size:13.5px; font-weight:600; padding:9px; border-radius:var(--radius-sm); font-family:'Guardian Sans Web','Open Sans',sans-serif;}
+.btn-outline:hover { border-color:var(--dark); }
+.races-list { flex:1; padding:8px 0; overflow-y:auto; }
+.race-item { padding:12px 20px; border-bottom:1px solid var(--border); cursor:pointer; transition:background .1s; }
+.race-item:last-child { border-bottom:none; }
+.race-item:hover { background:var(--surface); }
+.race-item-office { font-size:10.5px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--subtle); margin-bottom:2px; }
+.race-item-name { font-size:13.5px; font-weight:600; color:var(--dark); }
+.race-item-badge { display:inline-block; font-size:10.5px; font-weight:700; padding:2px 8px; border-radius:20px; margin-top:5px; }
+.badge-runoff  { background:#FEF3C7; color:#92400E; }
+.badge-results { background:var(--green-faint); color:var(--green); }
+.badge-qa      { background:var(--red-faint); color:var(--red); }
+.sidebar-footer { padding:12px 20px; border-top:1px solid var(--border); background:var(--surface); font-size:12px; color:var(--subtle); text-align:center; }
+
+/* ── Races Section ── */
+.races-section { margin-top:28px; display:none; }
+.races-section.visible { display:block; }
+.section-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; gap:16px; }
+.section-heading { font-size:22px; font-weight:800; letter-spacing:-.4px; }
+.section-heading span { color:var(--red); }
+.mode-toggle { display:flex; background:var(--surface); border:1px solid var(--border); border-radius:8px; padding:3px; gap:2px; }
+.mode-btn { padding:6px 16px; font-size:13px; font-weight:600; border:none; background:transparent; color:var(--muted); border-radius:6px; transition:all .15s; font-family:'Guardian Sans Web','Open Sans',sans-serif;}
+.mode-btn.active { background:var(--white); color:var(--dark); box-shadow:var(--shadow-sm); }
+.filter-row { display:flex; gap:6px; flex-wrap:wrap; margin-bottom:20px; }
+.filter-pill { padding:6px 14px; border-radius:20px; border:1.5px solid var(--border); background:var(--white); font-size:13px; font-weight:500; color:var(--muted); transition:all .12s; font-family:'Guardian Sans Web','Open Sans',sans-serif;}
+.filter-pill:hover:not(.active) { border-color:var(--dark); color:var(--dark); }
+.filter-pill.active { background:var(--dark); border-color:var(--dark); color:var(--white); font-weight:600; }
+.source-strip { display:flex; align-items:center; gap:8px; font-size:12px; color:var(--subtle); margin-bottom:20px; }
+.source-dot { width:6px; height:6px; background:var(--green); border-radius:50%; flex-shrink:0; }
+
+/* Race group */
+.race-group { margin-bottom:28px; }
+.group-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1.2px; color:var(--subtle); margin-bottom:10px; display:flex; align-items:center; gap:8px; padding-bottom:8px; border-bottom:1px solid var(--border); }
+
+/* Race card */
+.race-card { background:var(--white); border-radius:var(--radius); border:1px solid var(--border); margin-bottom:8px; overflow:hidden; transition:box-shadow .15s,border-color .15s; }
+.race-card:hover { border-color:#CBD5E1; box-shadow:var(--shadow-sm); }
+.race-card.expanded { border-color:#CBD5E1; box-shadow:var(--shadow); }
+.card-header { padding:18px 20px; display:flex; align-items:center; justify-content:space-between; cursor:pointer; gap:16px; }
+.card-header-left { flex:1; min-width:0; }
+.card-office { font-size:11px; font-weight:600; text-transform:uppercase; letter-spacing:.9px; color:var(--subtle); margin-bottom:4px; }
+.card-name { font-size:16px; font-weight:700; color:var(--dark); letter-spacing:-.2px; margin-bottom:8px; }
+.card-meta { display:flex; align-items:center; gap:8px; flex-wrap:wrap; }
+.status { font-size:11px; font-weight:700; padding:3px 9px; border-radius:20px; letter-spacing:.2px; }
+.status-runoff      { background:#FEF3C7; color:#92400E; }
+.status-winner      { background:var(--green-faint); color:var(--green); }
+.status-uncontested { background:var(--surface); color:var(--muted); border:1px solid var(--border); }
+.status-pending     { background:var(--blue-faint); color:var(--blue); }
+.mini-cand { display:flex; align-items:center; gap:5px; font-size:12.5px; color:var(--muted); font-weight:500; }
+.dot { width:7px; height:7px; border-radius:50%; flex-shrink:0; }
+.dot-d { background:#2563EB; }
+.dot-r { background:var(--red); }
+.dot-i { background:var(--subtle); }
+.mini-sep { color:var(--border); font-size:11px; }
+.card-header-right { display:flex; align-items:center; gap:10px; flex-shrink:0; }
+.follow-btn { display:flex; align-items:center; gap:5px; padding:6px 13px; border-radius:20px; border:1.5px solid var(--border); background:var(--white); font-size:12.5px; font-weight:600; color:var(--muted); font-family:'Guardian Sans Web','Open Sans',sans-serif;transition:all .15s; }
+.follow-btn:hover { border-color:var(--gold); color:var(--gold); }
+.follow-btn.following { background:var(--gold-faint); border-color:var(--gold); color:#92400E; }
+.chevron { color:var(--subtle); font-size:18px; transition:transform .2s; line-height:1; user-select:none; }
+.race-card.expanded .chevron { transform:rotate(180deg); }
+.card-body { display:none; border-top:1px solid var(--border); }
+.race-card.expanded .card-body { display:block; }
+
+/* Results */
+.results-block { padding:20px 20px 4px; }
+.result-row { display:grid; grid-template-columns:160px 1fr 90px; align-items:center; gap:12px; margin-bottom:12px; }
+.result-name { font-size:13.5px; font-weight:600; color:var(--dark); display:flex; align-items:center; gap:7px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.result-track { background:var(--surface); border-radius:4px; height:8px; overflow:hidden; border:1px solid var(--border); }
+.result-fill { height:100%; border-radius:4px; background:var(--red); }
+.result-fill.winner { background:var(--green); }
+.result-stat { text-align:right; font-size:12.5px; color:var(--muted); font-weight:500; white-space:nowrap; }
+.result-stat strong { font-size:14px; font-weight:700; color:var(--dark); }
+
+/* Candidate grid */
+.cand-grid { display:grid; gap:12px; padding:20px; }
+.cand-grid.two   { grid-template-columns:1fr 1fr; }
+.cand-grid.three { grid-template-columns:1fr 1fr 1fr; }
+.cand-col { border:1px solid var(--border); border-radius:var(--radius); padding:16px; background:var(--white); position:relative; }
+.cand-col.winner { border-color:var(--green); background:var(--green-faint); }
+.winner-chip { position:absolute; top:12px; right:12px; background:var(--green); color:#fff; font-size:10px; font-weight:700; padding:2px 8px; border-radius:20px; text-transform:uppercase; letter-spacing:.5px; }
+.cand-head { display:flex; align-items:center; gap:11px; margin-bottom:10px; }
+.cand-avatar { width:44px; height:44px; border-radius:50%; background:var(--surface); border:1.5px solid var(--border); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.cand-name { font-size:14.5px; font-weight:700; color:var(--dark); }
+.party-tag { display:inline-block; font-size:11px; font-weight:600; padding:2px 8px; border-radius:20px; margin-top:3px; }
+.party-d { background:var(--blue-faint); color:#1E40AF; }
+.party-r { background:var(--red-faint); color:var(--red); }
+.party-i { background:var(--surface); color:var(--muted); border:1px solid var(--border); }
+.cand-link { display:inline-flex; align-items:center; gap:4px; font-size:12.5px; font-weight:600; color:var(--red); margin-top:8px; }
+
+/* Q&A */
+.qa-block { padding:0 20px 20px; }
+.qa-header { display:flex; align-items:center; justify-content:space-between; margin-bottom:14px; }
+.qa-label { font-size:12.5px; font-weight:700; color:var(--dark); display:flex; align-items:center; gap:8px; }
+.qa-label span { font-weight:400; color:var(--muted); }
+.qa-nav { display:flex; gap:4px; }
+.qa-dot-btn { width:28px; height:28px; border-radius:50%; border:1.5px solid var(--border); background:var(--white); font-size:11.5px; font-weight:700; color:var(--muted); font-family:'Guardian Sans Web','Open Sans',sans-serif;transition:all .12s; display:flex; align-items:center; justify-content:center; }
+.qa-dot-btn.active { background:var(--dark); border-color:var(--dark); color:#fff; }
+.qa-question { font-size:14px; font-weight:600; color:var(--dark); padding:12px 16px; background:var(--surface); border-radius:var(--radius-sm); border-left:3px solid var(--red); margin-bottom:14px; line-height:1.5; }
+.qa-answers { display:grid; gap:10px; }
+.qa-answers.two   { grid-template-columns:1fr 1fr; }
+.qa-answers.three { grid-template-columns:1fr 1fr 1fr; }
+.qa-who { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:.8px; color:var(--subtle); margin-bottom:6px; display:flex; align-items:center; gap:6px; }
+.qa-text { font-size:13.5px; color:var(--body); line-height:1.6; background:var(--surface); border:1px solid var(--border); border-radius:var(--radius-sm); padding:12px 14px; }
+.qa-read { display:inline-flex; align-items:center; gap:4px; font-size:12px; font-weight:600; color:var(--red); margin-top:7px; }
+
+/* Card footer */
+.card-footer { padding:12px 20px; border-top:1px solid var(--border); background:var(--surface); display:flex; align-items:center; justify-content:space-between; }
+.footer-source { font-size:11.5px; color:var(--subtle); }
+.deep-link { font-size:11.5px; color:var(--muted); display:flex; align-items:center; gap:5px; }
+.deep-link:hover { color:var(--red); }
+
+/* How to vote */
+.how-section { margin-top:44px; }
+.how-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:14px; margin-top:16px; }
+.how-card { background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:22px 20px; }
+.how-card:hover { box-shadow:var(--shadow); }
+.how-icon { width:40px; height:40px; border-radius:10px; background:var(--red-faint); display:flex; align-items:center; justify-content:center; font-size:18px; margin-bottom:12px; }
+.how-title { font-size:14px; font-weight:700; margin-bottom:6px; }
+.how-text { font-size:13px; color:var(--muted); line-height:1.6; }
+.how-text a { font-weight:600; }
+hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
+
+/* Empty state */
+.map-prompt { margin-top:28px; background:var(--white); border:1px solid var(--border); border-radius:var(--radius); padding:32px; text-align:center; }
+.map-prompt-icon { font-size:32px; margin-bottom:12px; }
+.map-prompt h3 { font-size:16px; font-weight:700; color:var(--dark); margin-bottom:6px; }
+.map-prompt p { font-size:13.5px; color:var(--muted); }
+</style>
+</head>
+<body>
+
+<div class="dates-bar">
+  <div class="dates-bar-inner">
+    <div class="date-item">Register by: <strong>Oct. 5</strong></div>
+    <div class="date-dot"></div>
+    <div class="date-item">Early voting: <strong>Oct. 19 – 30</strong></div>
+    <div class="date-dot"></div>
+    <div class="date-item">Election Day: <span class="date-pill">Nov. 3, 2026</span></div>
+  </div>
+</div>
+
+<nav class="nav">
+  <div class="nav-logo">
+    <img src="ci-logo.png" alt="Community Impact" style="height:36px;width:auto;display:block;" />
+    <div class="logo-divider"></div>
+    <div class="logo-sub">Elections ʼ26</div>
+  </div>
+  <div class="nav-links">
+    <button class="nav-link">News</button>
+    <button class="nav-link active">Elections</button>
+    <button class="nav-link">Advertise</button>
+    <button class="nav-link">About</button>
+  </div>
+  <div class="nav-right">
+    <button class="btn-ghost">Follow us on social</button>
+    <button class="btn-ghost">Sign up for newsletters</button>
+    <button class="btn-primary" onclick="toggleLogin()"><span id="login-label">Sign in</span></button>
+  </div>
+</nav>
+
+<section class="hero">
+  <div class="hero-eyebrow">🗳 November 3, 2026 &nbsp;·&nbsp; Local elections matter</div>
+  <h1>Elections <em>2026</em></h1>
+  <p class="hero-sub">Find every race on your ballot, from local to statewide offices.</p>
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" placeholder="Enter your address to find your races…" />
+    <button class="search-btn">Find my ballot</button>
+  </div>
+  <p class="search-hint">Or browse by community using the map below:</p>
+</section>
+
+<div class="page-body">
+  <div class="two-col">
+
+    <!-- Map -->
+    <div class="map-card">
+      <div class="map-topbar">
+        <div class="map-topbar-left">
+          <div class="map-title">Coverage areas</div>
+          <div class="metro-pills">
+            <button class="metro-pill active" data-metro="austin"  onclick="flyToMetro('austin',this)">Austin</button>
+            <button class="metro-pill" data-metro="houston" onclick="flyToMetro('houston',this)">Houston</button>
+            <button class="metro-pill" data-metro="dfw"     onclick="flyToMetro('dfw',this)">DFW</button>
+            <button class="metro-pill" data-metro="sa"      onclick="flyToMetro('sa',this)">San Antonio</button>
+          </div>
+        </div>
+        <button class="map-reset-btn" onclick="resetMap()">View all</button>
+      </div>
+      <div class="selected-banner" id="sel-banner">
+        <span>Showing races in <span class="selected-community" id="sel-name"></span></span>
+        <span class="selected-hint">Scroll down to browse ↓</span>
+        <button class="clear-btn" onclick="clearSelection()">✕ Clear</button>
+      </div>
+      <div id="map"></div>
+    </div>
+
+    <!-- Sidebar -->
+    <div class="sidebar-card">
+      <div class="sidebar-header">
+        <div class="sidebar-title"><span class="star-icon">★</span> My Races</div>
+        <button class="sidebar-action" onclick="toggleLogin()"><span id="sidebar-action-label">Sign in to save</span></button>
+      </div>
+      <div id="logged-out" class="login-gate">
+        <div class="gate-icon">⭐</div>
+        <h4>Follow races you care about</h4>
+        <p>Sign in to save races, get results the moment they're in, and see new Q&As from our journalists.</p>
+        <button class="btn-primary" onclick="toggleLogin()">Sign In</button>
+        <button class="btn-outline">Create Account</button>
+      </div>
+      <div id="logged-in" style="display:none;flex-direction:column;flex:1">
+        <div class="races-list">
+          <div class="race-item">
+            <div class="race-item-office">US House · Dist. 17</div>
+            <div class="race-item-name">Democratic Primary</div>
+            <span class="race-item-badge badge-runoff">Runoff →</span>
+          </div>
+          <div class="race-item">
+            <div class="race-item-office">AISD School Board</div>
+            <div class="race-item-name">Place 4</div>
+            <span class="race-item-badge badge-results">Results in</span>
+          </div>
+          <div class="race-item">
+            <div class="race-item-office">Round Rock City Council</div>
+            <div class="race-item-name">District 3</div>
+            <span class="race-item-badge badge-qa">New Q&amp;A</span>
+          </div>
+        </div>
+        <div class="sidebar-footer">Use ★ on any race card to follow it</div>
+      </div>
+    </div>
+  </div><!-- /two-col -->
+
+  <!-- Map prompt (shown before selection) -->
+  <div class="map-prompt" id="map-prompt">
+    <div class="map-prompt-icon">🗺️</div>
+    <h3>Select a community to see its races</h3>
+    <p>Click any highlighted area on the map above, or use the metro switcher to browse coverage areas.</p>
+  </div>
+
+  <!-- Races section (shown after selection) -->
+  <div class="races-section" id="races-section">
+    <div class="section-header">
+      <h2 class="section-heading">Races in <span id="races-community-name">Round Rock</span></h2>
+      <div class="mode-toggle">
+        <button class="mode-btn active" onclick="setMode(this)">Voter Guide</button>
+        <button class="mode-btn" onclick="setMode(this)">Results</button>
+      </div>
+    </div>
+    <div class="filter-row">
+      <button class="filter-pill active" onclick="setFilter(this)">All Races</button>
+      <button class="filter-pill" onclick="setFilter(this)">US &amp; State</button>
+      <button class="filter-pill" onclick="setFilter(this)">School Board</button>
+      <button class="filter-pill" onclick="setFilter(this)">City Council</button>
+      <button class="filter-pill" onclick="setFilter(this)">Propositions</button>
+    </div>
+    <div class="source-strip">
+      <div class="source-dot"></div>
+      Results: Travis County Elections Division · 11/03/2026 · <a href="#" style="color:var(--muted)">Methodology</a>
+    </div>
+
+    <!-- Race cards injected here -->
+    <div id="race-cards-container"></div>
+
+    <hr />
+    <div class="how-section">
+      <div class="section-header" style="margin-bottom:0">
+        <h2 class="section-heading">How to <span>Vote</span></h2>
+      </div>
+      <div class="how-grid">
+        <div class="how-card">
+          <div class="how-icon">📋</div>
+          <div class="how-title">Register to Vote</div>
+          <div class="how-text">Texas residents must register at least 30 days before Election Day. <a href="#">Check registration →</a></div>
+        </div>
+        <div class="how-card">
+          <div class="how-icon">🪪</div>
+          <div class="how-title">What to Bring</div>
+          <div class="how-text">Photo ID required: driver's license, passport, military ID, or Election ID Certificate. <a href="#">Full ID list →</a></div>
+        </div>
+        <div class="how-card">
+          <div class="how-icon">📍</div>
+          <div class="how-title">Find Your Polling Place</div>
+          <div class="how-text">Vote at any location in your county during early voting. <a href="#">Find locations →</a></div>
+        </div>
+      </div>
+    </div>
+  </div><!-- /races-section -->
+
+</div><!-- /page-body -->
+
+<script>
+// ─────────────────────────────────────────────
+// DATA
+// ─────────────────────────────────────────────
+const METROS = {
+  austin:  { label:'Austin Metro',      center:[30.38,-97.78], zoom:10, color:'#C41230' },
+  houston: { label:'Houston Metro',     center:[29.90,-95.50], zoom:10, color:'#1D4ED8' },
+  dfw:     { label:'Dallas–Fort Worth', center:[33.05,-96.95], zoom:10, color:'#6D28D9' },
+  sa:      { label:'San Antonio Metro', center:[29.57,-98.43], zoom:10, color:'#B45309' },
+};
+
+// Each community: metro, name, center [lat,lng], and approximate boundary polygon [[lat,lng],...]
+const COMMUNITIES = [
+  // ── Austin ──────────────────────────────────
+  { metro:'austin', name:'Round Rock',
+    center:[30.508,-97.679],
+    bounds:[[30.47,-97.73],[30.56,-97.73],[30.56,-97.61],[30.47,-97.61]] },
+  { metro:'austin', name:'Cedar Park',
+    center:[30.505,-97.820],
+    bounds:[[30.46,-97.90],[30.56,-97.90],[30.56,-97.76],[30.46,-97.76]] },
+  { metro:'austin', name:'Leander – Liberty Hill',
+    center:[30.578,-97.853],
+    bounds:[[30.54,-97.96],[30.66,-97.96],[30.66,-97.79],[30.54,-97.79]] },
+  { metro:'austin', name:'Georgetown',
+    center:[30.633,-97.677],
+    bounds:[[30.59,-97.77],[30.70,-97.77],[30.70,-97.59],[30.59,-97.59]] },
+  { metro:'austin', name:'Northwest Austin',
+    center:[30.428,-97.793],
+    bounds:[[30.37,-97.88],[30.47,-97.88],[30.47,-97.73],[30.37,-97.73]] },
+  { metro:'austin', name:'Central Austin',
+    center:[30.267,-97.743],
+    bounds:[[30.22,-97.80],[30.32,-97.80],[30.32,-97.69],[30.22,-97.69]] },
+  { metro:'austin', name:'East Austin',
+    center:[30.262,-97.705],
+    bounds:[[30.22,-97.72],[30.32,-97.72],[30.32,-97.63],[30.22,-97.63]] },
+  { metro:'austin', name:'Lake Travis – Westlake',
+    center:[30.340,-97.882],
+    bounds:[[30.27,-97.99],[30.42,-97.99],[30.42,-97.84],[30.27,-97.84]] },
+  { metro:'austin', name:'SW Austin – Dripping Springs',
+    center:[30.189,-97.973],
+    bounds:[[30.10,-98.12],[30.26,-98.12],[30.26,-97.87],[30.10,-97.87]] },
+  { metro:'austin', name:'Pflugerville – Hutto',
+    center:[30.440,-97.620],
+    bounds:[[30.38,-97.71],[30.53,-97.71],[30.53,-97.53],[30.38,-97.53]] },
+  { metro:'austin', name:'San Marcos – Buda – Kyle',
+    center:[29.882,-97.941],
+    bounds:[[29.76,-98.10],[29.98,-98.10],[29.98,-97.79],[29.76,-97.79]] },
+  { metro:'austin', name:'Bastrop – Cedar Creek',
+    center:[30.110,-97.320],
+    bounds:[[30.02,-97.51],[30.20,-97.51],[30.20,-97.15],[30.02,-97.15]] },
+
+  // ── Houston ─────────────────────────────────
+  { metro:'houston', name:'The Woodlands',
+    center:[30.166,-95.461],
+    bounds:[[30.11,-95.57],[30.22,-95.57],[30.22,-95.35],[30.11,-95.35]] },
+  { metro:'houston', name:'Spring – Klein',
+    center:[30.080,-95.417],
+    bounds:[[30.01,-95.52],[30.12,-95.52],[30.12,-95.31],[30.01,-95.31]] },
+  { metro:'houston', name:'Tomball – Magnolia',
+    center:[30.097,-95.619],
+    bounds:[[30.02,-95.76],[30.19,-95.76],[30.19,-95.55],[30.02,-95.55]] },
+  { metro:'houston', name:'Cy-Fair – Jersey Village',
+    center:[29.895,-95.650],
+    bounds:[[29.83,-95.76],[29.96,-95.76],[29.96,-95.58],[29.83,-95.58]] },
+  { metro:'houston', name:'Cypress',
+    center:[29.969,-95.697],
+    bounds:[[29.91,-95.80],[30.02,-95.80],[30.02,-95.62],[29.91,-95.62]] },
+  { metro:'houston', name:'Katy – Fulshear',
+    center:[29.786,-95.824],
+    bounds:[[29.71,-95.96],[29.86,-95.96],[29.86,-95.73],[29.71,-95.73]] },
+  { metro:'houston', name:'Heights – River Oaks – Montrose',
+    center:[29.768,-95.398],
+    bounds:[[29.73,-95.46],[29.81,-95.46],[29.81,-95.34],[29.73,-95.34]] },
+  { metro:'houston', name:'Bellaire – Meyerland – West University',
+    center:[29.706,-95.459],
+    bounds:[[29.66,-95.52],[29.74,-95.52],[29.74,-95.42],[29.66,-95.42]] },
+  { metro:'houston', name:'Sugar Land – Missouri City',
+    center:[29.620,-95.635],
+    bounds:[[29.55,-95.76],[29.68,-95.76],[29.68,-95.55],[29.55,-95.55]] },
+  { metro:'houston', name:'Pearland – Friendswood – Manvel',
+    center:[29.564,-95.341],
+    bounds:[[29.49,-95.46],[29.63,-95.46],[29.63,-95.22],[29.49,-95.22]] },
+  { metro:'houston', name:'Bay Area',
+    center:[29.568,-95.122],
+    bounds:[[29.48,-95.22],[29.64,-95.22],[29.64,-95.02],[29.48,-95.02]] },
+  { metro:'houston', name:'Lake Houston – Humble – Kingwood',
+    center:[30.022,-95.214],
+    bounds:[[29.94,-95.34],[30.11,-95.34],[30.11,-95.10],[29.94,-95.10]] },
+  { metro:'houston', name:'New Caney – Porter',
+    center:[30.146,-95.167],
+    bounds:[[30.07,-95.28],[30.22,-95.28],[30.22,-95.07],[30.07,-95.07]] },
+  { metro:'houston', name:'Conroe – Montgomery',
+    center:[30.312,-95.456],
+    bounds:[[30.22,-95.61],[30.45,-95.61],[30.45,-95.34],[30.22,-95.34]] },
+  { metro:'houston', name:'Bryan – College Station',
+    center:[30.628,-96.334],
+    bounds:[[30.54,-96.47],[30.72,-96.47],[30.72,-96.19],[30.54,-96.19]] },
+
+  // ── DFW ─────────────────────────────────────
+  { metro:'dfw', name:'Frisco',
+    center:[33.151,-96.824],
+    bounds:[[33.09,-96.92],[33.21,-96.92],[33.21,-96.74],[33.09,-96.74]] },
+  { metro:'dfw', name:'McKinney',
+    center:[33.197,-96.640],
+    bounds:[[33.14,-96.74],[33.28,-96.74],[33.28,-96.55],[33.14,-96.55]] },
+  { metro:'dfw', name:'Allen',
+    center:[33.103,-96.671],
+    bounds:[[33.06,-96.74],[33.14,-96.74],[33.14,-96.60],[33.06,-96.60]] },
+  { metro:'dfw', name:'Plano',
+    center:[33.020,-96.699],
+    bounds:[[32.97,-96.80],[33.07,-96.80],[33.07,-96.62],[32.97,-96.62]] },
+  { metro:'dfw', name:'Richardson',
+    center:[32.948,-96.730],
+    bounds:[[32.90,-96.80],[32.97,-96.80],[32.97,-96.66],[32.90,-96.66]] },
+  { metro:'dfw', name:'Prosper – Celina',
+    center:[33.236,-96.803],
+    bounds:[[33.18,-96.92],[33.33,-96.92],[33.33,-96.73],[33.18,-96.73]] },
+  { metro:'dfw', name:'Denton',
+    center:[33.215,-97.133],
+    bounds:[[33.15,-97.23],[33.28,-97.23],[33.28,-97.04],[33.15,-97.04]] },
+  { metro:'dfw', name:'Flower Mound – Highland Village – Argyle',
+    center:[33.014,-97.097],
+    bounds:[[32.96,-97.21],[33.07,-97.21],[33.07,-97.00],[32.96,-97.00]] },
+  { metro:'dfw', name:'Grapevine – Colleyville – Southlake',
+    center:[32.934,-97.078],
+    bounds:[[32.88,-97.18],[32.97,-97.18],[32.97,-97.00],[32.88,-97.00]] },
+  { metro:'dfw', name:'Keller – Roanoke – NE Fort Worth',
+    center:[32.934,-97.229],
+    bounds:[[32.87,-97.33],[32.99,-97.33],[32.99,-97.14],[32.87,-97.14]] },
+
+  // ── San Antonio ──────────────────────────────
+  { metro:'sa', name:'North San Antonio',
+    center:[29.599,-98.496],
+    bounds:[[29.54,-98.61],[29.66,-98.61],[29.66,-98.42],[29.54,-98.42]] },
+  { metro:'sa', name:'Northeast San Antonio',
+    center:[29.524,-98.366],
+    bounds:[[29.46,-98.47],[29.58,-98.47],[29.58,-98.28],[29.46,-98.28]] },
+  { metro:'sa', name:'New Braunfels',
+    center:[29.703,-98.125],
+    bounds:[[29.64,-98.23],[29.77,-98.23],[29.77,-98.03],[29.64,-98.03]] },
+  { metro:'sa', name:'Boerne – Fair Oaks Ranch',
+    center:[29.795,-98.732],
+    bounds:[[29.73,-98.85],[29.86,-98.85],[29.86,-98.64],[29.73,-98.64]] },
+];
+
+// Sample race data per community
+const RACE_DATA = {
+  'Round Rock': {
+    groups: [
+      { label:'🏛 US & State', races:[
+        { id:'rr-us17', office:'US House · District 17 · Democratic Primary', name:'US Representative, District 17',
+          status:'runoff', candidates:[
+            { name:'Milah Flores', party:'d', pct:43, votes:'20,362', runoff:true },
+            { name:'Casey Shepard', party:'d', pct:32, votes:'15,505', runoff:true },
+            { name:'J. Gordon Mitchell', party:'d', pct:25, votes:'11,961' },
+          ],
+          qa:{ q:'What is the most pressing issue facing District 17?',
+               answers:[
+                 { name:'Milah Flores', text:'"Affordable housing and economic opportunity for working families must be our top priority. I\'ll push for federal investment in workforce housing and small business support…"' },
+                 { name:'Casey Shepard', text:'"Border security and public safety are what I hear at every door. We need practical solutions that protect communities while keeping families together…"' },
+                 { name:'J. Gordon Mitchell', text:'"Infrastructure — roads, water systems, and broadband — are holding back district growth. I\'ll work across the aisle to secure funding for District 17…"' },
+               ]},
+        },
+      ]},
+      { label:'🎓 School Board', races:[
+        { id:'rr-rrisd4', office:'Round Rock ISD · Board of Trustees', name:'Place 4',
+          status:'winner', candidates:[
+            { name:'Patricia Nguyen', party:'r', pct:58, votes:'9,421', winner:true },
+            { name:'David Okonkwo', party:'d', pct:42, votes:'6,830' },
+          ],
+        },
+        { id:'rr-rrisd6', office:'Round Rock ISD · Board of Trustees', name:'Place 6',
+          status:'uncontested', candidates:[
+            { name:'James Whitfield', party:'i' },
+          ],
+        },
+      ]},
+      { label:'🏙 City Council', races:[
+        { id:'rr-council3', office:'Round Rock City Council', name:'District 3',
+          status:'pending', candidates:[
+            { name:'Sandra Kim', party:'d' },
+            { name:'Tom Alvarez', party:'r' },
+            { name:'Marco Delgado', party:'i' },
+          ],
+        },
+      ]},
+    ]
+  },
+  'Cedar Park': {
+    groups: [
+      { label:'🏛 US & State', races:[
+        { id:'cp-us17', office:'US House · District 17 · Democratic Primary', name:'US Representative, District 17',
+          status:'runoff', candidates:[
+            { name:'Milah Flores', party:'d', pct:43, votes:'20,362', runoff:true },
+            { name:'Casey Shepard', party:'d', pct:32, votes:'15,505', runoff:true },
+            { name:'J. Gordon Mitchell', party:'d', pct:25, votes:'11,961' },
+          ],
+        },
+      ]},
+      { label:'🎓 School Board', races:[
+        { id:'cp-lisd5', office:'Leander ISD · Board of Trustees', name:'Place 5',
+          status:'winner', candidates:[
+            { name:'Rachel Thornton', party:'r', pct:61, votes:'7,204', winner:true },
+            { name:'Marcus Webb', party:'d', pct:39, votes:'4,598' },
+          ],
+        },
+      ]},
+      { label:'🏙 City Council', races:[
+        { id:'cp-cc2', office:'Cedar Park City Council', name:'Place 2',
+          status:'pending', candidates:[
+            { name:'Linda Garza', party:'i' },
+            { name:'Steve Holloway', party:'r' },
+          ],
+        },
+      ]},
+    ]
+  },
+  'Georgetown': {
+    groups: [
+      { label:'🏛 US & State', races:[
+        { id:'gt-us17', office:'US House · District 17', name:'US Representative, District 17',
+          status:'runoff', candidates:[
+            { name:'Milah Flores', party:'d', pct:43, votes:'20,362', runoff:true },
+            { name:'Casey Shepard', party:'d', pct:32, votes:'15,505', runoff:true },
+          ],
+        },
+        { id:'gt-tx20', office:'Texas State House · District 20', name:'State Representative, District 20',
+          status:'winner', candidates:[
+            { name:'Terry Wilson', party:'r', pct:68, votes:'14,302', winner:true },
+            { name:'Ana Castillo', party:'d', pct:32, votes:'6,729' },
+          ],
+        },
+      ]},
+      { label:'🎓 School Board', races:[
+        { id:'gt-gisd3', office:'Georgetown ISD · Board of Trustees', name:'Place 3',
+          status:'pending', candidates:[
+            { name:'Brenda Olsen', party:'i' },
+            { name:'Carlos Ruiz', party:'i' },
+          ],
+        },
+      ]},
+    ]
+  },
+};
+
+// Default data for communities without specific entries
+const DEFAULT_RACES = {
+  groups:[
+    { label:'🏛 US & State', races:[
+      { id:'default-us', office:'US House · District 17 · Democratic Primary', name:'US Representative, District 17',
+        status:'runoff', candidates:[
+          { name:'Milah Flores', party:'d', pct:43, votes:'20,362', runoff:true },
+          { name:'Casey Shepard', party:'d', pct:32, votes:'15,505', runoff:true },
+        ],
+      },
+    ]},
+    { label:'🎓 School Board', races:[
+      { id:'default-sb', office:'Local ISD · Board of Trustees', name:'Place 4',
+        status:'pending', candidates:[
+          { name:'Candidate A', party:'r' },
+          { name:'Candidate B', party:'d' },
+        ],
+      },
+    ]},
+  ]
+};
+
+// ─────────────────────────────────────────────
+// MAP SETUP
+// ─────────────────────────────────────────────
+const map = L.map('map', {
+  center:[30.8,-97.4], zoom:6,
+  zoomControl:false, scrollWheelZoom:true,
+});
+L.tileLayer('https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png',{
+  attribution:'© <a href="https://carto.com/">CARTO</a>',
+  subdomains:'abcd', maxZoom:15,
+}).addTo(map);
+L.control.zoom({ position:'bottomright' }).addTo(map);
+
+// Metro cluster markers (overview zoom)
+const metroMarkers = {};
+Object.entries(METROS).forEach(([key,m]) => {
+  const icon = L.divIcon({
+    className:'',
+    html:`<div style="background:${m.color};width:56px;height:56px;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Guardian Sans Web','Open Sans',sans-serif;font-size:10px;font-weight:800;text-align:center;line-height:1.2;box-shadow:0 2px 12px rgba(0,0,0,.25);border:2.5px solid rgba(255,255,255,.9);cursor:pointer;">${m.label.replace(' Metro','').replace('Dallas–Fort Worth','DFW')}</div>`,
+    iconSize:[56,56], iconAnchor:[28,28],
+  });
+  metroMarkers[key] = L.marker(m.center,{icon,zIndexOffset:100})
+    .addTo(map)
+    .on('click',() => flyToMetro(key, document.querySelector(`.metro-pill[data-metro="${key}"]`)));
+});
+
+// Community layer
+const communityLayer = L.layerGroup().addTo(map);
+let selectedCommunity = null;
+let activeMetro = null;
+let polygonMap = {}; // name -> polygon ref
+
+function buildCommunityLayers(metro) {
+  communityLayer.clearLayers();
+  polygonMap = {};
+  const color = METROS[metro].color;
+  COMMUNITIES.filter(c => c.metro === metro).forEach(c => {
+    const isSelected = selectedCommunity === c.name;
+
+    // Boundary polygon
+    const poly = L.polygon(c.bounds, {
+      fillColor: color,
+      fillOpacity: isSelected ? 0.22 : 0.08,
+      color: color,
+      weight: isSelected ? 2.5 : 1.5,
+      opacity: isSelected ? 0.9 : 0.45,
+    }).addTo(communityLayer);
+    polygonMap[c.name] = poly;
+
+    // Hover effects
+    poly.on('mouseover', function() {
+      if (selectedCommunity !== c.name) {
+        this.setStyle({ fillOpacity:0.16, opacity:0.75, weight:2 });
+      }
+      this.bindTooltip(c.name, {
+        permanent:false, direction:'top', className:'', offset:[0,-4],
+        opacity:1,
+      }).openTooltip();
+    });
+    poly.on('mouseout', function() {
+      if (selectedCommunity !== c.name) {
+        this.setStyle({ fillOpacity:0.08, opacity:0.45, weight:1.5 });
+      }
+    });
+
+    // Click handler
+    poly.on('click', () => selectCommunity(c.name, metro));
+
+    // Center label marker
+    const labelIcon = L.divIcon({
+      className:'',
+      html:`<div style="
+        background:${isSelected ? color : 'rgba(255,255,255,0.88)'};
+        color:${isSelected ? '#fff' : color};
+        border:1.5px solid ${color};
+        font-family:'Guardian Sans Web','Open Sans',sans-serif;font-size:10px;font-weight:700;
+        padding:3px 7px;border-radius:20px;white-space:nowrap;
+        box-shadow:0 1px 4px rgba(0,0,0,.15);
+        cursor:pointer;letter-spacing:-.1px;
+        pointer-events:none;
+      ">${c.name.split('–')[0].trim()}</div>`,
+      iconAnchor:[0,0],
+    });
+    L.marker(c.center, { icon:labelIcon, interactive:false, zIndexOffset:50 })
+      .addTo(communityLayer);
+  });
+}
+
+// ─────────────────────────────────────────────
+// INTERACTIONS
+// ─────────────────────────────────────────────
+function flyToMetro(metroKey, btn) {
+  activeMetro = metroKey;
+  document.querySelectorAll('.metro-pill').forEach(p => p.classList.remove('active'));
+  if (btn) btn.classList.add('active');
+  Object.values(metroMarkers).forEach(m => map.removeLayer(m));
+  const m = METROS[metroKey];
+  map.flyTo(m.center, m.zoom, { duration:0.8 });
+  buildCommunityLayers(metroKey);
+}
+
+function selectCommunity(name, metro) {
+  selectedCommunity = name;
+  document.getElementById('sel-name').textContent = name;
+  document.getElementById('sel-banner').classList.add('visible');
+  map.closePopup();
+  buildCommunityLayers(metro || activeMetro);
+
+  // Show races
+  document.getElementById('map-prompt').style.display = 'none';
+  document.getElementById('races-community-name').textContent = name;
+  renderRaceCards(name);
+  document.getElementById('races-section').classList.add('visible');
+
+  setTimeout(() => {
+    document.getElementById('races-section').scrollIntoView({ behavior:'smooth', block:'start' });
+  }, 200);
+}
+
+function clearSelection() {
+  selectedCommunity = null;
+  document.getElementById('sel-banner').classList.remove('visible');
+  document.getElementById('races-section').classList.remove('visible');
+  document.getElementById('map-prompt').style.display = '';
+  if (activeMetro) buildCommunityLayers(activeMetro);
+}
+
+function resetMap() {
+  communityLayer.clearLayers();
+  polygonMap = {};
+  Object.entries(METROS).forEach(([key]) => {
+    if (!map.hasLayer(metroMarkers[key])) metroMarkers[key].addTo(map);
+  });
+  document.querySelectorAll('.metro-pill').forEach(p => p.classList.remove('active'));
+  map.flyTo([30.8,-97.4], 6, { duration:0.9 });
+  clearSelection();
+  activeMetro = null;
+}
+
+map.on('zoomend', () => {
+  if (map.getZoom() < 8) {
+    communityLayer.clearLayers();
+    polygonMap = {};
+    Object.entries(METROS).forEach(([key]) => {
+      if (!map.hasLayer(metroMarkers[key])) metroMarkers[key].addTo(map);
+    });
+  }
+});
+
+// ─────────────────────────────────────────────
+// RACE CARD RENDERER
+// ─────────────────────────────────────────────
+function partyLabel(p) {
+  if (p === 'd') return '<span class="party-tag party-d">Democrat</span>';
+  if (p === 'r') return '<span class="party-tag party-r">Republican</span>';
+  return '<span class="party-tag party-i">Nonpartisan</span>';
+}
+function dotClass(p) {
+  return p === 'd' ? 'dot-d' : p === 'r' ? 'dot-r' : 'dot-i';
+}
+function statusBadge(s) {
+  const map = { runoff:'status-runoff', winner:'status-winner', uncontested:'status-uncontested', pending:'status-pending' };
+  const labels = { runoff:'Runoff', winner:'✓ Winner Declared', uncontested:'Uncontested', pending:'Results Pending' };
+  return `<span class="status ${map[s]}">${labels[s]}</span>`;
+}
+
+function renderRaceCards(communityName) {
+  const data = RACE_DATA[communityName] || DEFAULT_RACES;
+  const container = document.getElementById('race-cards-container');
+  container.innerHTML = '';
+
+  data.groups.forEach(group => {
+    const groupEl = document.createElement('div');
+    groupEl.className = 'race-group';
+    groupEl.innerHTML = `<div class="group-label">${group.label}</div>`;
+
+    group.races.forEach(race => {
+      const miniCands = race.candidates.slice(0,3).map(c =>
+        `<span class="mini-cand"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.winner ? ' ✓' : ''}</span>`
+      ).join('<span class="mini-sep">·</span>');
+
+      // Results block
+      let resultsHtml = '';
+      if (race.candidates.some(c => c.pct)) {
+        resultsHtml = `<div class="results-block">` +
+          race.candidates.map(c => `
+            <div class="result-row">
+              <div class="result-name"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.runoff ? ' <span class="status status-runoff" style="font-size:10px;padding:2px 6px">Runoff</span>' : ''}</div>
+              <div class="result-track"><div class="result-fill ${c.winner ? 'winner' : ''}" style="width:${c.pct}%"></div></div>
+              <div class="result-stat"><strong>${c.pct}%</strong> · ${c.votes}</div>
+            </div>`).join('') +
+          `</div>`;
+      }
+
+      // Q&A block
+      let qaHtml = '';
+      if (race.qa) {
+        const n = race.qa.answers.length;
+        const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
+        qaHtml = `<div class="qa-block">
+          <div class="qa-header">
+            <div class="qa-label">Candidate Q&amp;A <span>— same questions, every candidate</span></div>
+            <div class="qa-nav">
+              <button class="qa-dot-btn active">1</button>
+              <button class="qa-dot-btn">2</button>
+              <button class="qa-dot-btn">3</button>
+            </div>
+          </div>
+          <div class="qa-question">${race.qa.q}</div>
+          <div class="qa-answers ${gridClass}">
+            ${race.qa.answers.map(a => `
+              <div>
+                <div class="qa-who"><span class="dot dot-d"></span>${a.name}</div>
+                <div class="qa-text">${a.text}</div>
+                <a href="#" class="qa-read">Read full answer →</a>
+              </div>`).join('')}
+          </div>
+        </div>`;
+      }
+
+      // Candidate grid (for non-results races)
+      let candGridHtml = '';
+      if (!race.candidates.some(c => c.pct) && race.status !== 'uncontested') {
+        const n = race.candidates.length;
+        const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
+        candGridHtml = `<div class="cand-grid ${gridClass}">
+          ${race.candidates.map(c => `
+            <div class="cand-col ${c.winner ? 'winner' : ''}">
+              ${c.winner ? '<div class="winner-chip">Winner</div>' : ''}
+              <div class="cand-head">
+                <div class="cand-avatar">👤</div>
+                <div><div class="cand-name">${c.name}</div>${partyLabel(c.party)}</div>
+              </div>
+              <a href="#" class="cand-link">Candidate Q&amp;A →</a>
+            </div>`).join('')}
+        </div>`;
+      } else if (race.status === 'uncontested') {
+        candGridHtml = `<div class="cand-grid" style="grid-template-columns:1fr;padding:20px">
+          <div class="cand-col" style="max-width:320px">
+            <div class="cand-head">
+              <div class="cand-avatar">👤</div>
+              <div><div class="cand-name">${race.candidates[0].name}</div>${partyLabel(race.candidates[0].party)}</div>
+            </div>
+            <p style="font-size:13px;color:var(--muted)">Running unopposed — no election held for this seat.</p>
+            <a href="#" class="cand-link">Candidate Q&amp;A →</a>
+          </div>
+        </div>`;
+      }
+
+      const slug = communityName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+      const card = document.createElement('div');
+      card.className = 'race-card';
+      card.id = race.id;
+      card.innerHTML = `
+        <div class="card-header" onclick="toggleCard('${race.id}')">
+          <div class="card-header-left">
+            <div class="card-office">${race.office}</div>
+            <div class="card-name">${race.name}</div>
+            <div class="card-meta">
+              ${statusBadge(race.status)}
+              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${miniCands}</div>
+            </div>
+          </div>
+          <div class="card-header-right">
+            <button class="follow-btn" onclick="event.stopPropagation();toggleFollow(this)"><span>☆</span> Follow</button>
+            <span class="chevron">⌄</span>
+          </div>
+        </div>
+        <div class="card-body">
+          ${resultsHtml}
+          ${candGridHtml}
+          ${qaHtml}
+          <div class="card-footer">
+            <span class="footer-source">Community Impact · Mar 2026</span>
+            <a href="#" class="deep-link">🔗 communityimpact.com/races/${slug}</a>
+          </div>
+        </div>`;
+      groupEl.appendChild(card);
+    });
+
+    container.appendChild(groupEl);
+  });
+}
+
+// ─────────────────────────────────────────────
+// UI HELPERS
+// ─────────────────────────────────────────────
+function toggleCard(id) {
+  document.getElementById(id).classList.toggle('expanded');
+}
+function toggleFollow(btn) {
+  const on = btn.classList.toggle('following');
+  btn.innerHTML = on ? '<span>★</span> Following' : '<span>☆</span> Follow';
+}
+function setFilter(btn) {
+  document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+function setMode(btn) {
+  document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+}
+let loggedIn = false;
+function toggleLogin() {
+  loggedIn = !loggedIn;
+  document.getElementById('logged-out').style.display = loggedIn ? 'none' : 'flex';
+  document.getElementById('logged-in').style.display = loggedIn ? 'flex' : 'none';
+  document.getElementById('login-label').textContent = loggedIn ? 'marie@ci.com ▾' : 'Sign in';
+  document.getElementById('sidebar-action-label').textContent = loggedIn ? 'Edit' : 'Sign in to save';
+}
+
+// Init – fly into Austin
+setTimeout(() => flyToMetro('austin', document.querySelector('.metro-pill[data-metro="austin"]')), 300);
+</script>
+</body>
+</html>
