@@ -739,8 +739,14 @@ function buildCommunityLayers(metro) {
   COMMUNITIES.filter(c => c.metro === metro).forEach(c => {
     const isSelected = selectedCommunity === c.name;
 
-    // Boundary polygon
-    const poly = L.polygon(c.bounds, {
+    // Boundary circle (smooth at all zoom levels)
+    const lats = c.bounds.map(p => p[0]);
+    const lngs = c.bounds.map(p => p[1]);
+    const latRadius = (Math.max(...lats) - Math.min(...lats)) * 111320 / 2;
+    const lngRadius = (Math.max(...lngs) - Math.min(...lngs)) * 111320 * Math.cos(c.center[0] * Math.PI / 180) / 2;
+    const radius = (latRadius + lngRadius) / 2;
+    const poly = L.circle(c.center, {
+      radius,
       fillColor: color,
       fillOpacity: isSelected ? 0.22 : 0.08,
       color: color,
