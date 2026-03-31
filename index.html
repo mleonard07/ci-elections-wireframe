@@ -741,6 +741,7 @@ const communityLayer = L.layerGroup().addTo(map);
 let selectedCommunity = null;
 let activeMetro = null;
 let polygonMap = {}; // name -> polygon ref
+let addressPin = null; // marker for geocoded address
 
 function buildCommunityLayers(metro) {
   communityLayer.clearLayers();
@@ -833,10 +834,17 @@ async function searchAddress() {
     });
 
     if (match) {
+      if (addressPin) { map.removeLayer(addressPin); addressPin = null; }
+      const pinIcon = L.divIcon({
+        className: '',
+        html: `<div style="width:14px;height:14px;background:#C41230;border-radius:50%;border:2.5px solid #fff;box-shadow:0 1px 6px rgba(0,0,0,.4);"></div>`,
+        iconSize: [14,14], iconAnchor: [7,7],
+      });
+      addressPin = L.marker(pt, { icon: pinIcon, zIndexOffset: 500 }).addTo(map);
       const metroBtn = document.querySelector(`.metro-pill[data-metro="${match.metro}"]`);
       flyToMetro(match.metro, metroBtn);
       setTimeout(() => {
-        map.flyTo(match.center, 13, { duration: 0.8 });
+        map.flyTo(pt, 15, { duration: 0.8 });
         selectCommunity(match.name, match.metro);
       }, 900);
     } else {
@@ -880,6 +888,7 @@ function selectCommunity(name, metro) {
 
 function clearSelection() {
   selectedCommunity = null;
+  if (addressPin) { map.removeLayer(addressPin); addressPin = null; }
   document.getElementById('sel-banner').classList.remove('visible');
   document.getElementById('races-section').classList.remove('visible');
   document.getElementById('map-prompt').style.display = '';
