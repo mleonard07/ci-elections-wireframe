@@ -1161,16 +1161,21 @@ function submitLogin() {
     return;
   }
   authState = { loggedIn: true, user };
+  // Restore saved favorites for this user
+  try {
+    const saved = localStorage.getItem('ci_favorites_' + user.email);
+    favorites = saved ? JSON.parse(saved) : {};
+  } catch(e) { favorites = {}; }
   closeLoginModal();
   updateNavAuthState();
   updateSidebarAuthState();
-  // Re-render cards so follow buttons become active
+  renderMyRaces();
   if (selectedCommunity) renderRaceCards(selectedCommunity);
 }
 
 function signOut() {
   authState = { loggedIn: false, user: null };
-  favorites = {};
+  favorites = {}; // clear in-memory only; localStorage persists for next login
   updateNavAuthState();
   updateSidebarAuthState();
   renderMyRaces();
@@ -1226,6 +1231,7 @@ function toggleFavorite(raceId, office, name, community) {
   } else {
     favorites[raceId] = { office, name, community };
   }
+  try { localStorage.setItem('ci_favorites_' + authState.user.email, JSON.stringify(favorites)); } catch(e) {}
   renderMyRaces();
   // Update the follow button on the card
   const btn = document.querySelector(`#${raceId} .follow-btn`);
