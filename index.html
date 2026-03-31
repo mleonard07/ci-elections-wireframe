@@ -308,9 +308,10 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
   <p class="hero-sub">Find every race on your ballot, from local to statewide offices.</p>
   <div class="search-wrap">
     <span class="search-icon">🔍</span>
-    <input type="text" placeholder="Enter your address to find your races…" />
-    <button class="search-btn">Find my ballot</button>
+    <input id="address-input" type="text" placeholder="Enter your address to find your races…" onkeydown="if(event.key==='Enter')searchAddress()" />
+    <button id="search-btn" class="search-btn" onclick="searchAddress()">Find my ballot</button>
   </div>
+  <p id="search-error" style="font-size:13px;color:var(--red);margin-top:8px;min-height:18px;"></p>
   <p class="search-hint">Or browse by community using the map below:</p>
 </section>
 
@@ -578,6 +579,15 @@ const COMMUNITIES = [
     bounds:[[29.73,-98.85],[29.86,-98.85],[29.86,-98.64],[29.73,-98.64]] },
 ];
 
+// Pre-compute radius (meters) for each community from its bounds
+COMMUNITIES.forEach(c => {
+  const lats = c.bounds.map(p => p[0]);
+  const lngs = c.bounds.map(p => p[1]);
+  const latR = (Math.max(...lats) - Math.min(...lats)) * 111320 / 2;
+  const lngR = (Math.max(...lngs) - Math.min(...lngs)) * 111320 * Math.cos(c.center[0] * Math.PI / 180) / 2;
+  c.radius = (latR + lngR) / 2;
+});
+
 // Sample race data per community
 const RACE_DATA = {
   'Round Rock': {
@@ -740,13 +750,8 @@ function buildCommunityLayers(metro) {
     const isSelected = selectedCommunity === c.name;
 
     // Boundary circle (smooth at all zoom levels)
-    const lats = c.bounds.map(p => p[0]);
-    const lngs = c.bounds.map(p => p[1]);
-    const latRadius = (Math.max(...lats) - Math.min(...lats)) * 111320 / 2;
-    const lngRadius = (Math.max(...lngs) - Math.min(...lngs)) * 111320 * Math.cos(c.center[0] * Math.PI / 180) / 2;
-    const radius = (latRadius + lngRadius) / 2;
     const poly = L.circle(c.center, {
-      radius,
+      radius: c.radius,
       fillColor: color,
       fillOpacity: isSelected ? 0.22 : 0.08,
       color: color,
@@ -797,6 +802,54 @@ function buildCommunityLayers(metro) {
 // ─────────────────────────────────────────────
 // INTERACTIONS
 // ─────────────────────────────────────────────
+async function searchAddress() {
+  const input = document.getElementById('address-input');
+  const btn   = document.getElementById('search-btn');
+  const error = document.getElementById('search-error');
+  const query = input.value.trim();
+  if (!query) return;
+
+  btn.textContent = 'Searching…';
+  btn.disabled = true;
+  error.textContent = '';
+
+  try {
+    const url = `https://nominatim.openstreetmap.org/search?q=${encodeURIComponent(query)}&format=json&limit=1&countrycodes=us`;
+    const resp = await fetch(url, { headers: { 'Accept-Language': 'en', 'User-Agent': 'CommunityImpact-ElectionsWireframe/1.0' } });
+    const results = await resp.json();
+
+    if (!results.length) {
+      error.textContent = 'Address not found. Try including your city and state.';
+      return;
+    }
+
+    const pt = L.latLng(parseFloat(results[0].lat), parseFloat(results[0].lon));
+
+    // Find the closest community whose circle contains the point
+    let match = null, minDist = Infinity;
+    COMMUNITIES.forEach(c => {
+      const dist = pt.distanceTo(L.latLng(c.center[0], c.center[1]));
+      if (dist <= c.radius && dist < minDist) { minDist = dist; match = c; }
+    });
+
+    if (match) {
+      const metroBtn = document.querySelector(`.metro-pill[data-metro="${match.metro}"]`);
+      flyToMetro(match.metro, metroBtn);
+      setTimeout(() => {
+        map.flyTo(match.center, 13, { duration: 0.8 });
+        selectCommunity(match.name, match.metro);
+      }, 900);
+    } else {
+      error.textContent = 'This address isn\'t in our coverage area yet. Try browsing the map below.';
+    }
+  } catch(e) {
+    error.textContent = 'Search unavailable. Please try again.';
+  } finally {
+    btn.textContent = 'Find my ballot';
+    btn.disabled = false;
+  }
+}
+
 function flyToMetro(metroKey, btn) {
   activeMetro = metroKey;
   document.querySelectorAll('.metro-pill').forEach(p => p.classList.remove('active'));
