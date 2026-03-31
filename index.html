@@ -269,6 +269,50 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
 .map-prompt-icon { font-size:32px; margin-bottom:12px; }
 .map-prompt h3 { font-size:16px; font-weight:700; color:var(--dark); margin-bottom:6px; }
 .map-prompt p { font-size:13.5px; color:var(--muted); }
+
+/* ── Login modal ── */
+.modal-overlay { position:fixed; inset:0; background:rgba(0,0,0,.45); z-index:2000; display:flex; align-items:center; justify-content:center; opacity:0; pointer-events:none; transition:opacity .2s; }
+.modal-overlay.open { opacity:1; pointer-events:all; }
+.modal-box { background:var(--white); border-radius:12px; width:100%; max-width:400px; padding:36px 32px 28px; box-shadow:0 20px 60px rgba(0,0,0,.18); position:relative; transform:translateY(8px); transition:transform .2s; }
+.modal-overlay.open .modal-box { transform:translateY(0); }
+.modal-close { position:absolute; top:14px; right:16px; background:none; border:none; font-size:20px; color:var(--muted); cursor:pointer; line-height:1; padding:4px 8px; }
+.modal-close:hover { color:var(--dark); }
+.modal-logo { display:flex; align-items:center; gap:10px; margin-bottom:20px; }
+.modal-logo img { height:28px; width:auto; }
+.modal-divider { width:1px; height:24px; background:var(--border); }
+.modal-logo-sub { font-size:11px; font-weight:800; letter-spacing:.08em; color:var(--body); text-transform:uppercase; }
+.modal-title { font-size:18px; font-weight:700; color:var(--dark); margin-bottom:6px; }
+.modal-sub { font-size:13px; color:var(--muted); margin-bottom:24px; }
+.form-field { margin-bottom:16px; }
+.form-field label { display:block; font-size:12.5px; font-weight:600; color:var(--body); margin-bottom:6px; }
+.form-field input { width:100%; padding:10px 14px; border:1.5px solid var(--border); border-radius:var(--radius-sm); font-size:14px; font-family:'Guardian Sans Web','Open Sans',sans-serif; color:var(--dark); outline:none; box-sizing:border-box; transition:border-color .15s; }
+.form-field input:focus { border-color:var(--red); }
+.auth-error { font-size:12.5px; color:var(--red); margin-bottom:14px; min-height:18px; }
+.modal-submit { width:100%; padding:11px; background:var(--red); color:#fff; border:none; border-radius:30px; font-size:14px; font-weight:700; font-family:'Guardian Sans Web','Open Sans',sans-serif; cursor:pointer; margin-bottom:16px; transition:background .15s; }
+.modal-submit:hover { background:var(--red-hover); }
+.modal-demo-hint { font-size:11.5px; color:var(--muted); text-align:center; line-height:1.5; padding:10px 12px; background:var(--surface); border-radius:6px; }
+.modal-demo-hint strong { color:var(--body); }
+
+/* ── User pill (logged-in nav) ── */
+.user-pill { display:flex; align-items:center; gap:8px; padding:5px 12px 5px 6px; border-radius:30px; border:1.5px solid var(--border); background:var(--white); cursor:pointer; font-family:'Guardian Sans Web','Open Sans',sans-serif; font-size:13px; font-weight:600; color:var(--dark); position:relative; transition:border-color .15s; }
+.user-pill:hover { border-color:var(--dark); }
+.user-avatar { width:26px; height:26px; border-radius:50%; background:var(--red); color:#fff; font-size:10px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; }
+.user-dropdown { position:absolute; top:calc(100% + 8px); right:0; background:var(--white); border:1px solid var(--border); border-radius:8px; box-shadow:var(--shadow); min-width:160px; padding:6px; z-index:1000; display:none; }
+.user-pill.open .user-dropdown { display:block; }
+.user-dropdown button { width:100%; text-align:left; padding:8px 12px; background:none; border:none; border-radius:6px; font-size:13px; font-family:'Guardian Sans Web','Open Sans',sans-serif; color:var(--body); cursor:pointer; }
+.user-dropdown button:hover { background:var(--surface); }
+
+/* ── My Races sidebar (logged-in) ── */
+.my-race-item { display:flex; align-items:flex-start; justify-content:space-between; padding:10px 0; border-bottom:1px solid var(--border); gap:8px; }
+.my-race-item:last-child { border-bottom:none; }
+.my-race-office { font-size:11px; font-weight:600; color:var(--muted); text-transform:uppercase; letter-spacing:.04em; margin-bottom:2px; }
+.my-race-name { font-size:13px; font-weight:600; color:var(--dark); margin-bottom:3px; }
+.my-race-community { font-size:11.5px; color:var(--muted); }
+.my-race-remove { background:none; border:none; color:var(--muted); font-size:16px; cursor:pointer; line-height:1; padding:2px 4px; flex-shrink:0; margin-top:1px; }
+.my-race-remove:hover { color:var(--red); }
+.my-races-empty { padding:24px 16px; text-align:center; }
+.my-races-empty p { font-size:13px; color:var(--muted); line-height:1.5; }
+.follow-btn.locked { opacity:.45; cursor:default; }
 </style>
 </head>
 <body>
@@ -298,7 +342,9 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
   <div class="nav-right">
     <button class="btn-ghost" onclick="window.open('https://communityimpact.com/social','_blank')">Follow us on social</button>
     <button class="btn-ghost" onclick="window.open('https://communityimpact.com/newsletter/','_blank')">Sign up for newsletters</button>
-    <button class="btn-primary" onclick="toggleLogin()"><span id="login-label">Sign in</span></button>
+    <div id="nav-auth">
+      <button class="btn-primary" onclick="openLoginModal()">Sign in</button>
+    </div>
   </div>
 </nav>
 
@@ -344,34 +390,17 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
     <div class="sidebar-card">
       <div class="sidebar-header">
         <div class="sidebar-title"><span class="star-icon">★</span> My Races</div>
-        <button class="sidebar-action" onclick="toggleLogin()"><span id="sidebar-action-label">Sign in to save</span></button>
+        <button class="sidebar-action" id="sidebar-action-btn" onclick="openLoginModal()">Sign in to save</button>
       </div>
       <div id="logged-out" class="login-gate">
         <div class="gate-icon">⭐</div>
         <h4>Follow races you care about</h4>
         <p>Sign in to save races, get results the moment they're in, and see new Q&As from our journalists.</p>
-        <button class="btn-primary" onclick="toggleLogin()">Sign In</button>
+        <button class="btn-primary" onclick="openLoginModal()">Sign In</button>
         <button class="btn-outline">Create Account</button>
       </div>
-      <div id="logged-in" style="display:none;flex-direction:column;flex:1">
-        <div class="races-list">
-          <div class="race-item">
-            <div class="race-item-office">US House · Dist. 17</div>
-            <div class="race-item-name">Democratic Primary</div>
-            <span class="race-item-badge badge-runoff">Runoff →</span>
-          </div>
-          <div class="race-item">
-            <div class="race-item-office">AISD School Board</div>
-            <div class="race-item-name">Place 4</div>
-            <span class="race-item-badge badge-results">Results in</span>
-          </div>
-          <div class="race-item">
-            <div class="race-item-office">Round Rock City Council</div>
-            <div class="race-item-name">District 3</div>
-            <span class="race-item-badge badge-qa">New Q&amp;A</span>
-          </div>
-        </div>
-        <div class="sidebar-footer">Use ★ on any race card to follow it</div>
+      <div id="logged-in" style="display:none;flex-direction:column;flex:1;padding:8px 16px 16px">
+        <div id="my-races-list"></div>
       </div>
     </div>
   </div><!-- /two-col -->
@@ -1032,7 +1061,9 @@ function renderRaceCards(communityName) {
             </div>
           </div>
           <div class="card-header-right">
-            <button class="follow-btn" onclick="event.stopPropagation();toggleFollow(this)"><span>☆</span> Follow</button>
+            <button class="follow-btn ${authState.loggedIn ? (favorites[race.id] ? 'following' : '') : 'locked'}" onclick="event.stopPropagation();toggleFavorite('${race.id}','${race.office.replace(/'/g,"\\'")}','${race.name.replace(/'/g,"\\'")}','${communityName.replace(/'/g,"\\'")}')">
+            <span>${authState.loggedIn && favorites[race.id] ? '★' : '☆'}</span> ${authState.loggedIn && favorites[race.id] ? 'Following' : 'Follow'}
+          </button>
             <span class="chevron">⌄</span>
           </div>
         </div>
@@ -1058,10 +1089,6 @@ function renderRaceCards(communityName) {
 function toggleCard(id) {
   document.getElementById(id).classList.toggle('expanded');
 }
-function toggleFollow(btn) {
-  const on = btn.classList.toggle('following');
-  btn.innerHTML = on ? '<span>★</span> Following' : '<span>☆</span> Follow';
-}
 function setFilter(btn) {
   document.querySelectorAll('.filter-pill').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
@@ -1070,17 +1097,176 @@ function setMode(btn) {
   document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
   btn.classList.add('active');
 }
-let loggedIn = false;
-function toggleLogin() {
-  loggedIn = !loggedIn;
-  document.getElementById('logged-out').style.display = loggedIn ? 'none' : 'flex';
-  document.getElementById('logged-in').style.display = loggedIn ? 'flex' : 'none';
-  document.getElementById('login-label').textContent = loggedIn ? 'marie@ci.com ▾' : 'Sign in';
-  document.getElementById('sidebar-action-label').textContent = loggedIn ? 'Edit' : 'Sign in to save';
+
+// ─────────────────────────────────────────────
+// AUTH & FAVORITES
+// ─────────────────────────────────────────────
+
+// DEVELOPERS: Replace this object with a real API call in authenticate()
+const DUMMY_USERS = [
+  { email: 'demo@communityimpact.com', password: 'Elections2026', name: 'Demo User', initials: 'DU' },
+  { email: 'marie@communityimpact.com', password: 'Elections2026', name: 'Marie Leonard', initials: 'ML' },
+];
+
+let authState = { loggedIn: false, user: null };
+let favorites = {}; // raceId -> { office, name, community }
+
+function openLoginModal() {
+  document.getElementById('login-modal').classList.add('open');
+  document.getElementById('auth-email').focus();
+  document.getElementById('auth-error').textContent = '';
+}
+function closeLoginModal() {
+  document.getElementById('login-modal').classList.remove('open');
+  document.getElementById('auth-email').value = '';
+  document.getElementById('auth-password').value = '';
+  document.getElementById('auth-error').textContent = '';
 }
 
+// DEVELOPERS: Replace this function body with your real auth integration
+function authenticate(email, password) {
+  return DUMMY_USERS.find(u => u.email === email && u.password === password) || null;
+}
+
+function submitLogin() {
+  const email    = document.getElementById('auth-email').value.trim();
+  const password = document.getElementById('auth-password').value;
+  const user     = authenticate(email, password);
+  if (!user) {
+    document.getElementById('auth-error').textContent = 'Incorrect email or password.';
+    return;
+  }
+  authState = { loggedIn: true, user };
+  closeLoginModal();
+  updateNavAuthState();
+  updateSidebarAuthState();
+  // Re-render cards so follow buttons become active
+  if (selectedCommunity) renderRaceCards(selectedCommunity);
+}
+
+function signOut() {
+  authState = { loggedIn: false, user: null };
+  favorites = {};
+  updateNavAuthState();
+  updateSidebarAuthState();
+  if (selectedCommunity) renderRaceCards(selectedCommunity);
+}
+
+function updateNavAuthState() {
+  const nav = document.getElementById('nav-auth');
+  if (authState.loggedIn) {
+    nav.innerHTML = `
+      <div class="user-pill" id="user-pill" onclick="toggleUserDropdown()">
+        <div class="user-avatar">${authState.user.initials}</div>
+        <span>${authState.user.name.split(' ')[0]}</span>
+        <span style="font-size:10px;color:var(--muted)">▾</span>
+        <div class="user-dropdown" id="user-dropdown">
+          <button onclick="signOut()">Sign out</button>
+        </div>
+      </div>`;
+  } else {
+    nav.innerHTML = `<button class="btn-primary" onclick="openLoginModal()">Sign in</button>`;
+  }
+}
+
+function toggleUserDropdown() {
+  document.getElementById('user-pill')?.classList.toggle('open');
+}
+document.addEventListener('click', e => {
+  const pill = document.getElementById('user-pill');
+  if (pill && !pill.contains(e.target)) pill.classList.remove('open');
+});
+
+function updateSidebarAuthState() {
+  const loggedOut = document.getElementById('logged-out');
+  const loggedIn  = document.getElementById('logged-in');
+  const actionBtn = document.getElementById('sidebar-action-btn');
+  if (authState.loggedIn) {
+    loggedOut.style.display = 'none';
+    loggedIn.style.display  = 'flex';
+    actionBtn.style.display = 'none';
+    renderMyRaces();
+  } else {
+    loggedOut.style.display = 'flex';
+    loggedIn.style.display  = 'none';
+    actionBtn.style.display = '';
+    actionBtn.textContent   = 'Sign in to save';
+  }
+}
+
+function toggleFavorite(raceId, office, name, community) {
+  if (!authState.loggedIn) { openLoginModal(); return; }
+  if (favorites[raceId]) {
+    delete favorites[raceId];
+  } else {
+    favorites[raceId] = { office, name, community };
+  }
+  renderMyRaces();
+  // Update the follow button on the card
+  const btn = document.querySelector(`#${raceId} .follow-btn`);
+  if (btn) applyFollowBtnState(btn, !!favorites[raceId]);
+}
+
+function applyFollowBtnState(btn, following) {
+  if (following) {
+    btn.classList.add('following');
+    btn.innerHTML = '<span>★</span> Following';
+  } else {
+    btn.classList.remove('following');
+    btn.innerHTML = '<span>☆</span> Follow';
+  }
+}
+
+function renderMyRaces() {
+  const list = document.getElementById('my-races-list');
+  const ids = Object.keys(favorites);
+  if (!ids.length) {
+    list.innerHTML = `<div class="my-races-empty"><p>Star any race below to save it here.</p></div>`;
+    return;
+  }
+  list.innerHTML = ids.map(id => {
+    const f = favorites[id];
+    return `<div class="my-race-item">
+      <div>
+        <div class="my-race-office">${f.office}</div>
+        <div class="my-race-name">${f.name}</div>
+        <div class="my-race-community">${f.community}</div>
+      </div>
+      <button class="my-race-remove" onclick="toggleFavorite('${id}','${f.office}','${f.name}','${f.community}')" title="Remove">×</button>
+    </div>`;
+  }).join('');
+}
+
+// ─────────────────────────────────────────────
 // Init – fly into Austin
 setTimeout(() => flyToMetro('austin', document.querySelector('.metro-pill[data-metro="austin"]')), 300);
 </script>
+<!-- Login modal -->
+<div class="modal-overlay" id="login-modal" onclick="if(event.target===this)closeLoginModal()">
+  <div class="modal-box">
+    <button class="modal-close" onclick="closeLoginModal()">×</button>
+    <div class="modal-logo">
+      <img src="ci-logo.png" alt="Community Impact" />
+      <div class="modal-divider"></div>
+      <div class="modal-logo-sub">Elections 2026</div>
+    </div>
+    <div class="modal-title">Sign in to your account</div>
+    <div class="modal-sub">Save races, get results, and read candidate Q&As.</div>
+    <div class="form-field">
+      <label for="auth-email">Email address</label>
+      <input id="auth-email" type="email" placeholder="you@example.com" onkeydown="if(event.key==='Enter')submitLogin()" />
+    </div>
+    <div class="form-field">
+      <label for="auth-password">Password</label>
+      <input id="auth-password" type="password" placeholder="••••••••" onkeydown="if(event.key==='Enter')submitLogin()" />
+    </div>
+    <div class="auth-error" id="auth-error"></div>
+    <button class="modal-submit" onclick="submitLogin()">Sign in</button>
+    <div class="modal-demo-hint">
+      <strong>Demo credentials</strong><br>
+      demo@communityimpact.com &nbsp;/&nbsp; Elections2026
+    </div>
+  </div>
+</div>
 </body>
 </html>
