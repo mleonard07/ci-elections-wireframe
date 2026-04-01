@@ -1066,6 +1066,123 @@ function statusBadge(s) {
   return `<span class="status ${map[s]}">${labels[s]}</span>`;
 }
 
+function findRaceById(raceId) {
+  for (const [community, data] of Object.entries(RACE_DATA)) {
+    for (const group of data.groups) {
+      const race = group.races.find(r => r.id === raceId);
+      if (race) return { race, community };
+    }
+  }
+  for (const group of DEFAULT_RACES.groups) {
+    const race = group.races.find(r => r.id === raceId);
+    if (race) return { race, community: null };
+  }
+  return null;
+}
+
+// Builds a single race card DOM element. cardId defaults to race.id but
+// can be prefixed (e.g. 'saved-') to avoid duplicate IDs across sections.
+function buildRaceCard(race, communityName, cardId) {
+  cardId = cardId || race.id;
+  const miniCands = race.candidates.slice(0,3).map(c =>
+    `<span class="mini-cand"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.winner ? ' ✓' : ''}</span>`
+  ).join('<span class="mini-sep">·</span>');
+
+  let resultsHtml = '';
+  if (race.candidates.some(c => c.pct)) {
+    resultsHtml = `<div class="results-block">` +
+      race.candidates.map(c => `
+        <div class="result-row">
+          <div class="result-name"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.runoff ? ' <span class="status status-runoff" style="font-size:10px;padding:2px 6px">Runoff</span>' : ''}</div>
+          <div class="result-track"><div class="result-fill ${c.winner ? 'winner' : ''}" style="width:${c.pct}%"></div></div>
+          <div class="result-stat"><strong>${c.pct}%</strong> · ${c.votes}</div>
+        </div>`).join('') + `</div>`;
+  }
+
+  let qaHtml = '';
+  if (race.qa) {
+    const n = race.qa.answers.length;
+    const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
+    qaHtml = `<div class="qa-block">
+      <div class="qa-header">
+        <div class="qa-label">Candidate Q&amp;A <span>— same questions, every candidate</span></div>
+        <div class="qa-nav"><button class="qa-dot-btn active">1</button><button class="qa-dot-btn">2</button><button class="qa-dot-btn">3</button></div>
+      </div>
+      <div class="qa-question">${race.qa.q}</div>
+      <div class="qa-answers ${gridClass}">
+        ${race.qa.answers.map(a => `
+          <div>
+            <div class="qa-who"><span class="dot dot-d"></span>${a.name}</div>
+            <div class="qa-text">${a.text}</div>
+            <a href="#" class="qa-read">Read full answer →</a>
+          </div>`).join('')}
+      </div>
+    </div>`;
+  }
+
+  let candGridHtml = '';
+  if (!race.candidates.some(c => c.pct) && race.status !== 'uncontested') {
+    const n = race.candidates.length;
+    const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
+    candGridHtml = `<div class="cand-grid ${gridClass}">
+      ${race.candidates.map(c => `
+        <div class="cand-col ${c.winner ? 'winner' : ''}">
+          ${c.winner ? '<div class="winner-chip">Winner</div>' : ''}
+          <div class="cand-head">
+            <div class="cand-avatar">👤</div>
+            <div><div class="cand-name">${c.name}</div>${partyLabel(c.party)}</div>
+          </div>
+          <a href="#" class="cand-link">Candidate Q&amp;A →</a>
+        </div>`).join('')}
+    </div>`;
+  } else if (race.status === 'uncontested') {
+    candGridHtml = `<div class="cand-grid" style="grid-template-columns:1fr;padding:20px">
+      <div class="cand-col" style="max-width:320px">
+        <div class="cand-head">
+          <div class="cand-avatar">👤</div>
+          <div><div class="cand-name">${race.candidates[0].name}</div>${partyLabel(race.candidates[0].party)}</div>
+        </div>
+        <p style="font-size:13px;color:var(--muted)">Running unopposed — no election held for this seat.</p>
+        <a href="#" class="cand-link">Candidate Q&amp;A →</a>
+      </div>
+    </div>`;
+  }
+
+  const slug = communityName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
+  const isFaved = !!favorites[race.id];
+  const card = document.createElement('div');
+  card.className = 'race-card';
+  card.id = cardId;
+  card.innerHTML = `
+    <div class="card-header" onclick="toggleCard('${cardId}')">
+      <div class="card-header-left">
+        <div class="card-office">${race.office}</div>
+        <div class="card-name">${race.name}</div>
+        <div class="card-meta">
+          ${statusBadge(race.status)}
+          <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${miniCands}</div>
+        </div>
+      </div>
+      <div class="card-header-right">
+        <button class="follow-btn ${authState.loggedIn ? (isFaved ? 'following' : '') : 'locked'}"
+          onclick="event.stopPropagation();toggleFavorite('${race.id}','${race.office.replace(/'/g,"\\'")}','${race.name.replace(/'/g,"\\'")}','${communityName.replace(/'/g,"\\'")}')">
+          <span>${authState.loggedIn && isFaved ? '★' : '☆'}</span> ${authState.loggedIn && isFaved ? 'Following' : 'Follow'}
+        </button>
+        <span class="chevron">⌄</span>
+      </div>
+    </div>
+    <div class="card-body">
+      ${resultsHtml}
+      ${candGridHtml}
+      ${qaHtml}
+      <div class="card-footer">
+        <span class="footer-source">Community Impact · ${communityName}</span>
+        <a href="#" class="deep-link">🔗 communityimpact.com/races/${slug}</a>
+      </div>
+    </div>`;
+  return card;
+}
+
 function renderRaceCards(communityName) {
   const data = RACE_DATA[communityName] || DEFAULT_RACES;
   const container = document.getElementById('race-cards-container');
@@ -1077,108 +1194,7 @@ function renderRaceCards(communityName) {
     groupEl.innerHTML = `<div class="group-label">${group.label}</div>`;
 
     group.races.forEach(race => {
-      const miniCands = race.candidates.slice(0,3).map(c =>
-        `<span class="mini-cand"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.winner ? ' ✓' : ''}</span>`
-      ).join('<span class="mini-sep">·</span>');
-
-      // Results block
-      let resultsHtml = '';
-      if (race.candidates.some(c => c.pct)) {
-        resultsHtml = `<div class="results-block">` +
-          race.candidates.map(c => `
-            <div class="result-row">
-              <div class="result-name"><span class="dot ${dotClass(c.party)}"></span>${c.name}${c.runoff ? ' <span class="status status-runoff" style="font-size:10px;padding:2px 6px">Runoff</span>' : ''}</div>
-              <div class="result-track"><div class="result-fill ${c.winner ? 'winner' : ''}" style="width:${c.pct}%"></div></div>
-              <div class="result-stat"><strong>${c.pct}%</strong> · ${c.votes}</div>
-            </div>`).join('') +
-          `</div>`;
-      }
-
-      // Q&A block
-      let qaHtml = '';
-      if (race.qa) {
-        const n = race.qa.answers.length;
-        const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
-        qaHtml = `<div class="qa-block">
-          <div class="qa-header">
-            <div class="qa-label">Candidate Q&amp;A <span>— same questions, every candidate</span></div>
-            <div class="qa-nav">
-              <button class="qa-dot-btn active">1</button>
-              <button class="qa-dot-btn">2</button>
-              <button class="qa-dot-btn">3</button>
-            </div>
-          </div>
-          <div class="qa-question">${race.qa.q}</div>
-          <div class="qa-answers ${gridClass}">
-            ${race.qa.answers.map(a => `
-              <div>
-                <div class="qa-who"><span class="dot dot-d"></span>${a.name}</div>
-                <div class="qa-text">${a.text}</div>
-                <a href="#" class="qa-read">Read full answer →</a>
-              </div>`).join('')}
-          </div>
-        </div>`;
-      }
-
-      // Candidate grid (for non-results races)
-      let candGridHtml = '';
-      if (!race.candidates.some(c => c.pct) && race.status !== 'uncontested') {
-        const n = race.candidates.length;
-        const gridClass = n === 2 ? 'two' : n === 3 ? 'three' : '';
-        candGridHtml = `<div class="cand-grid ${gridClass}">
-          ${race.candidates.map(c => `
-            <div class="cand-col ${c.winner ? 'winner' : ''}">
-              ${c.winner ? '<div class="winner-chip">Winner</div>' : ''}
-              <div class="cand-head">
-                <div class="cand-avatar">👤</div>
-                <div><div class="cand-name">${c.name}</div>${partyLabel(c.party)}</div>
-              </div>
-              <a href="#" class="cand-link">Candidate Q&amp;A →</a>
-            </div>`).join('')}
-        </div>`;
-      } else if (race.status === 'uncontested') {
-        candGridHtml = `<div class="cand-grid" style="grid-template-columns:1fr;padding:20px">
-          <div class="cand-col" style="max-width:320px">
-            <div class="cand-head">
-              <div class="cand-avatar">👤</div>
-              <div><div class="cand-name">${race.candidates[0].name}</div>${partyLabel(race.candidates[0].party)}</div>
-            </div>
-            <p style="font-size:13px;color:var(--muted)">Running unopposed — no election held for this seat.</p>
-            <a href="#" class="cand-link">Candidate Q&amp;A →</a>
-          </div>
-        </div>`;
-      }
-
-      const slug = communityName.toLowerCase().replace(/\s+/g,'-').replace(/[^a-z0-9-]/g,'');
-      const card = document.createElement('div');
-      card.className = 'race-card';
-      card.id = race.id;
-      card.innerHTML = `
-        <div class="card-header" onclick="toggleCard('${race.id}')">
-          <div class="card-header-left">
-            <div class="card-office">${race.office}</div>
-            <div class="card-name">${race.name}</div>
-            <div class="card-meta">
-              ${statusBadge(race.status)}
-              <div style="display:flex;align-items:center;gap:6px;flex-wrap:wrap">${miniCands}</div>
-            </div>
-          </div>
-          <div class="card-header-right">
-            <button class="follow-btn ${authState.loggedIn ? (favorites[race.id] ? 'following' : '') : 'locked'}" onclick="event.stopPropagation();toggleFavorite('${race.id}','${race.office.replace(/'/g,"\\'")}','${race.name.replace(/'/g,"\\'")}','${communityName.replace(/'/g,"\\'")}')">
-            <span>${authState.loggedIn && favorites[race.id] ? '★' : '☆'}</span> ${authState.loggedIn && favorites[race.id] ? 'Following' : 'Follow'}
-          </button>
-            <span class="chevron">⌄</span>
-          </div>
-        </div>
-        <div class="card-body">
-          ${resultsHtml}
-          ${candGridHtml}
-          ${qaHtml}
-          <div class="card-footer">
-            <span class="footer-source">Community Impact · Mar 2026</span>
-            <a href="#" class="deep-link">🔗 communityimpact.com/races/${slug}</a>
-          </div>
-        </div>`;
+      const card = buildRaceCard(race, communityName);
       groupEl.appendChild(card);
     });
 
@@ -1312,9 +1328,7 @@ function toggleFavorite(raceId, office, name, community) {
   }
   try { localStorage.setItem('ci_favorites_' + authState.user.email, JSON.stringify(favorites)); } catch(e) {}
   renderMyRaces();
-  // Update the follow button on the card
-  const btn = document.querySelector(`#${raceId} .follow-btn`);
-  if (btn) applyFollowBtnState(btn, !!favorites[raceId]);
+  syncFollowButtons(raceId, !!favorites[raceId]);
 }
 
 function applyFollowBtnState(btn, following) {
@@ -1325,6 +1339,13 @@ function applyFollowBtnState(btn, following) {
     btn.classList.remove('following');
     btn.innerHTML = '<span>☆</span> Follow';
   }
+}
+
+function syncFollowButtons(raceId, following) {
+  [raceId, 'saved-' + raceId].forEach(id => {
+    const btn = document.querySelector(`#${id} .follow-btn`);
+    if (btn) applyFollowBtnState(btn, following);
+  });
 }
 
 function renderMyRaces() {
@@ -1350,26 +1371,20 @@ function renderMyRaces() {
     }).join('');
   }
 
-  // Below-map saved races section
+  // Below-map saved races section — full expandable cards
   if (!ids.length) {
     section.classList.remove('visible');
     return;
   }
   section.classList.add('visible');
-  cards.innerHTML = ids.map(id => {
-    const f = favorites[id];
-    return `<div class="saved-race-card">
-      <div class="saved-race-card-left">
-        <div class="saved-race-card-office">${f.office}</div>
-        <div class="saved-race-card-name">${f.name}</div>
-        <div class="saved-race-card-community">${f.community}</div>
-      </div>
-      <div class="saved-race-card-actions">
-        <button class="saved-race-view-btn" onclick="goToCommunity('${f.community.replace(/'/g,"\\'")}')">View races →</button>
-        <button class="saved-race-unstar" onclick="toggleFavorite('${id}','${f.office.replace(/'/g,"\\'")}','${f.name.replace(/'/g,"\\'")}','${f.community.replace(/'/g,"\\'")}')">★</button>
-      </div>
-    </div>`;
-  }).join('');
+  cards.innerHTML = '';
+  ids.forEach(id => {
+    const found = findRaceById(id);
+    if (!found) return;
+    const card = buildRaceCard(found.race, found.community || favorites[id].community, 'saved-' + id);
+    card.classList.add('expanded'); // open by default in saved section
+    cards.appendChild(card);
+  });
 }
 
 function goToCommunity(communityName) {
