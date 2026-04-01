@@ -152,7 +152,7 @@ Recommended replacements: Google Maps Geocoding API, Mapbox Geocoding, or Smarty
 | Filter pills + Results toggle | Production-ready |
 | "Find your polling location" link | Links to Texas SOS voter portal — update for non-TX markets |
 | Mobile layout | Production-ready |
-| Email/push notifications | Not built — copy references it but no flow exists yet |
+| Email/push notifications | Out of scope for phase 1 |
 | Candidate profile pages | Not built — cards link to `communityimpact.com/races/[slug]` as placeholder |
 
 ---

@@ -368,43 +368,6 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
 .ballot-polling-link { font-size:13px; font-weight:600; color:var(--red); text-decoration:none; }
 .ballot-footer-sub { font-size:11.5px; color:var(--subtle); }
 
-/* ── Notification Sidebar Button ── */
-.sidebar-notif { padding:8px 16px 12px; }
-.notif-sidebar-btn { display:flex; align-items:center; justify-content:space-between; width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--white); font-size:13px; font-weight:600; color:var(--body); font-family:'Guardian Sans Web','Open Sans',sans-serif; cursor:pointer; transition:all .12s; }
-.notif-sidebar-btn:hover { border-color:var(--gold); color:var(--dark); }
-.notif-sidebar-btn.active { border-color:var(--gold); background:var(--gold-faint); }
-.notif-sidebar-status { font-size:11.5px; font-weight:700; color:var(--gold); }
-
-/* ── Notification Modal ── */
-.notif-modal-box { background:var(--white); border-radius:var(--radius-lg); width:min(500px,95vw); max-height:92vh; overflow-y:auto; }
-.notif-modal-head { padding:22px 24px 16px; border-bottom:1px solid var(--border); display:flex; align-items:flex-start; justify-content:space-between; gap:16px; }
-.notif-modal-head h3 { font-size:17px; font-weight:800; color:var(--dark); margin:0 0 3px; }
-.notif-modal-head p { font-size:13px; color:var(--muted); margin:0; }
-.notif-modal-body { padding:20px 24px 24px; display:flex; flex-direction:column; gap:20px; }
-.notif-section-label { font-size:11px; font-weight:700; text-transform:uppercase; letter-spacing:1px; color:var(--subtle); margin-bottom:8px; }
-.notif-check-row { display:flex; align-items:flex-start; gap:10px; padding:9px 0; border-bottom:1px solid var(--border); cursor:pointer; }
-.notif-check-row:last-child { border-bottom:none; }
-.notif-check-row input[type=checkbox] { margin-top:2px; accent-color:var(--red); width:15px; height:15px; flex-shrink:0; cursor:pointer; }
-.notif-check-label { font-size:13.5px; font-weight:600; color:var(--dark); }
-.notif-check-sub { font-size:12px; color:var(--muted); margin-top:2px; }
-.notif-freq-group { display:flex; flex-direction:column; gap:6px; }
-.notif-radio-row { display:flex; align-items:center; gap:10px; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; cursor:pointer; transition:all .12s; }
-.notif-radio-row:has(input:checked) { border-color:var(--red); background:var(--red-faint); }
-.notif-radio-row input[type=radio] { accent-color:var(--red); width:15px; height:15px; flex-shrink:0; cursor:pointer; }
-.notif-radio-label { font-size:13px; font-weight:600; color:var(--dark); flex:1; }
-.notif-radio-sub { font-size:11.5px; color:var(--muted); }
-.notif-email-field { width:100%; padding:10px 14px; font-size:14px; font-family:'Guardian Sans Web','Open Sans',sans-serif; border:1.5px solid var(--border); border-radius:8px; color:var(--dark); outline:none; box-sizing:border-box; }
-.notif-email-field:focus { border-color:var(--red); box-shadow:0 0 0 3px rgba(196,18,48,.08); }
-.notif-save-btn { width:100%; padding:11px; background:var(--red); color:#fff; border:none; border-radius:var(--radius-sm); font-size:14px; font-weight:700; font-family:'Guardian Sans Web','Open Sans',sans-serif; cursor:pointer; }
-.notif-save-btn:hover { background:var(--red-hover); }
-.notif-confirm { padding:36px 24px 32px; text-align:center; display:none; flex-direction:column; align-items:center; gap:14px; }
-.notif-confirm.visible { display:flex; }
-.notif-confirm-icon { width:58px; height:58px; background:var(--green-faint); border-radius:50%; display:flex; align-items:center; justify-content:center; font-size:26px; }
-.notif-confirm h3 { font-size:18px; font-weight:800; color:var(--dark); margin:0; }
-.notif-confirm p { font-size:13px; color:var(--muted); margin:0; line-height:1.55; }
-.notif-confirm-summary { background:var(--surface); border-radius:8px; padding:12px 16px; width:100%; text-align:left; font-size:13px; color:var(--body); line-height:1.8; border:1px solid var(--border); }
-.notif-edit-btn { font-size:13px; font-weight:600; color:var(--muted); background:none; border:none; cursor:pointer; font-family:'Guardian Sans Web','Open Sans',sans-serif; text-decoration:underline; padding:0; }
-
 /* Polling location link in sidebar */
 .sidebar-polling { padding:12px 16px 4px; }
 .sidebar-polling-btn { display:flex; align-items:center; gap:7px; width:100%; padding:9px 12px; border:1.5px solid var(--border); border-radius:8px; background:var(--white); font-size:13px; font-weight:600; color:var(--body); font-family:'Guardian Sans Web','Open Sans',sans-serif; cursor:pointer; transition:all .12s; text-align:left; }
@@ -537,18 +500,12 @@ hr { border:none; border-top:1px solid var(--border); margin:36px 0; }
       <div id="logged-out" class="login-gate">
         <div class="gate-icon">⭐</div>
         <h4>Follow races you care about</h4>
-        <p>Sign in to save races, get results the moment they're in, and see new Q&As from our journalists.</p>
+        <p>Sign in to save races and follow along with every race on your ballot.</p>
         <button class="btn-primary" onclick="openLoginModal()">Sign In</button>
         <button class="btn-outline">Create Account</button>
       </div>
       <div id="logged-in" style="display:none;flex-direction:column;flex:1;padding:8px 16px 16px">
         <div id="my-races-list"></div>
-        <div class="sidebar-notif">
-          <button class="notif-sidebar-btn" id="notif-sidebar-btn" onclick="openNotifModal()">
-            <span>🔔 Get election alerts</span>
-            <span class="notif-sidebar-status" id="notif-sidebar-status"></span>
-          </button>
-        </div>
         <div class="sidebar-polling">
           <button class="sidebar-polling-btn" onclick="window.open('https://teamrv-mvp.sos.texas.gov/MVP/mvp.do','_blank')">
             📍 Find your polling location
@@ -1565,70 +1522,6 @@ function goToCommunity(communityName) {
 }
 
 // ─────────────────────────────────────────────
-// NOTIFICATION PREFERENCES
-// ─────────────────────────────────────────────
-let notifPrefs = null;
-
-function openNotifModal() {
-  if (authState.loggedIn) {
-    const field = document.getElementById('notif-email');
-    if (field && !field.value) field.value = authState.user.email;
-  }
-  notifPrefs ? showNotifConfirm() : showNotifForm();
-  document.getElementById('notif-modal').classList.add('open');
-}
-function closeNotifModal() {
-  document.getElementById('notif-modal').classList.remove('open');
-}
-function showNotifForm() {
-  document.getElementById('notif-form-view').style.display = 'flex';
-  document.getElementById('notif-confirm-view').classList.remove('visible');
-}
-function showNotifConfirm() {
-  document.getElementById('notif-form-view').style.display = 'none';
-  document.getElementById('notif-confirm-view').classList.add('visible');
-}
-function saveNotifPrefs() {
-  const email = document.getElementById('notif-email').value.trim();
-  if (!email) { document.getElementById('notif-email').focus(); return; }
-
-  const triggers = [];
-  if (document.getElementById('nc-results').checked)  triggers.push('Results for saved races');
-  if (document.getElementById('nc-qa').checked)        triggers.push('New candidate Q&As');
-  if (document.getElementById('nc-runoff').checked)    triggers.push('Runoff alerts');
-  if (document.getElementById('nc-reminder').checked)  triggers.push('Election Day reminder');
-
-  const freqVal   = document.querySelector('input[name="notif-freq"]:checked').value;
-  const freqLabel = freqVal === 'instant' ? 'as soon as they\'re in'
-                  : freqVal === 'daily'   ? 'in a daily digest (~6 PM)'
-                  :                         'during election week only (Oct 27–Nov 3)';
-
-  notifPrefs = { email, triggers, frequency: freqVal };
-
-  const name = authState.loggedIn ? authState.user.name.split(' ')[0] : 'You';
-  document.getElementById('notif-confirm-heading').textContent = `You're all set, ${name}!`;
-  document.getElementById('notif-confirm-desc').textContent    = `We'll send updates to ${email}.`;
-  document.getElementById('notif-confirm-summary').innerHTML   =
-    `<strong>Alerts:</strong> ${triggers.length ? triggers.join(', ') : 'None selected'}<br>` +
-    `<strong>Results:</strong> ${freqLabel}`;
-
-  updateNotifSidebarBtn();
-  showNotifConfirm();
-}
-function updateNotifSidebarBtn() {
-  const btn    = document.getElementById('notif-sidebar-btn');
-  const status = document.getElementById('notif-sidebar-status');
-  if (!btn) return;
-  if (notifPrefs) {
-    btn.classList.add('active');
-    status.textContent = '● On';
-  } else {
-    btn.classList.remove('active');
-    status.textContent = '';
-  }
-}
-
-// ─────────────────────────────────────────────
 // PRINT BALLOT GUIDE
 // ─────────────────────────────────────────────
 let myPicks = {}; // raceId -> candidate name, session only
@@ -1698,77 +1591,6 @@ function buildBallotContent() {
 // Init – fly into Austin
 setTimeout(() => flyToMetro('austin', document.querySelector('.metro-pill[data-metro="austin"]')), 300);
 </script>
-<!-- Notification Preferences Modal -->
-<div class="modal-overlay" id="notif-modal" onclick="if(event.target===this)closeNotifModal()">
-  <div class="notif-modal-box">
-    <div class="notif-modal-head">
-      <div>
-        <h3>🔔 Election Alerts</h3>
-        <p>Stay up to date on the races you're following.</p>
-      </div>
-      <button class="modal-close" style="position:static;margin:0" onclick="closeNotifModal()">×</button>
-    </div>
-
-    <div id="notif-form-view" class="notif-modal-body">
-      <div>
-        <div class="notif-section-label">Notify me about</div>
-        <label class="notif-check-row">
-          <input type="checkbox" id="nc-results" checked>
-          <div><div class="notif-check-label">Results for my saved races</div><div class="notif-check-sub">Get notified as soon as results are certified</div></div>
-        </label>
-        <label class="notif-check-row">
-          <input type="checkbox" id="nc-qa" checked>
-          <div><div class="notif-check-label">New candidate Q&amp;As</div><div class="notif-check-sub">When journalists publish new answers from candidates in your races</div></div>
-        </label>
-        <label class="notif-check-row">
-          <input type="checkbox" id="nc-runoff" checked>
-          <div><div class="notif-check-label">Runoff alerts</div><div class="notif-check-sub">If a saved race goes to a runoff election</div></div>
-        </label>
-        <label class="notif-check-row">
-          <input type="checkbox" id="nc-reminder">
-          <div><div class="notif-check-label">Election Day reminder</div><div class="notif-check-sub">A heads-up the day before — November 2, 2026</div></div>
-        </label>
-      </div>
-
-      <div>
-        <div class="notif-section-label">Results frequency</div>
-        <div class="notif-freq-group">
-          <label class="notif-radio-row">
-            <input type="radio" name="notif-freq" value="instant" checked>
-            <span class="notif-radio-label">As soon as they're in</span>
-            <span class="notif-radio-sub">Instant</span>
-          </label>
-          <label class="notif-radio-row">
-            <input type="radio" name="notif-freq" value="daily">
-            <span class="notif-radio-label">Daily digest</span>
-            <span class="notif-radio-sub">~6 PM</span>
-          </label>
-          <label class="notif-radio-row">
-            <input type="radio" name="notif-freq" value="week">
-            <span class="notif-radio-label">Election week only</span>
-            <span class="notif-radio-sub">Oct 27 – Nov 3</span>
-          </label>
-        </div>
-      </div>
-
-      <div>
-        <div class="notif-section-label">Send to</div>
-        <input class="notif-email-field" id="notif-email" type="email" placeholder="your@email.com">
-      </div>
-
-      <button class="notif-save-btn" onclick="saveNotifPrefs()">Save My Preferences</button>
-    </div>
-
-    <div id="notif-confirm-view" class="notif-confirm">
-      <div class="notif-confirm-icon">✓</div>
-      <h3 id="notif-confirm-heading">You're all set!</h3>
-      <p id="notif-confirm-desc"></p>
-      <div class="notif-confirm-summary" id="notif-confirm-summary"></div>
-      <button class="notif-edit-btn" onclick="showNotifForm()">Update preferences</button>
-    </div>
-  </div>
-</div>
-
 <!-- Print Ballot Modal -->
 <div class="modal-overlay" id="print-modal" onclick="if(event.target===this)closePrintModal()">
   <div class="print-modal-box">
